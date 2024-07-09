@@ -1,0 +1,75 @@
+.add-items {
+    padding: 20px;
+}
+
+.add-item-button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-size: 16px;
+    display: inline-flex;
+    align-items: center;
+}
+
+.add-item-button span {
+    font-size: 20px;
+    margin-right: 10px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+thead th {
+    background-color: #f2f2f2;
+    padding: 10px;
+    border: 1px solid #ccc;
+}
+
+tbody td {
+    padding: 10px;
+    border: 1px solid #ccc;
+}
+
+.popup {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.popup-content {
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    width: 400px;
+    box-shadow: 0 4px 20px rgba(130, 36, 36, 0.1);
+}
+
+.popup-content h2 {
+    margin-top: 0;
+}
+
+.popup-content form label {
+    display: block;
+    margin-bottom: 15px;
+}
+
+.popup-content form input,
+.popup-content form select {
+    width: 100%;
+    padding: 8px;
+    margin-top: 50px;
+    margin-bottom: 10px;
+    border: 5px;
+}
