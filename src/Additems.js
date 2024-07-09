@@ -69,16 +69,20 @@ const AddItems = () => {
                 </tbody>
             </table>
 
-            {/* Pagination can be added here */}
-
             {showPopup && (
                 <div className="popup">
                     <div className="popup-content">
+                        <span className="close-icon" onClick={togglePopup}>&times;</span>
                         <h2>Add New Item</h2>
                         <form>
                             <label>
                                 Category:
-                                <select name="category" value={form.category} onChange={handleInputChange}>
+                                <select
+                                    name="category"
+                                    value={form.category}
+                                    onChange={handleInputChange}
+                                    className="input-field category"
+                                >
                                     <option value="kirana">Kirana</option>
                                     <option value="vegetable">Vegetable</option>
                                     <option value="milk">Milk</option>
@@ -92,6 +96,7 @@ const AddItems = () => {
                                     name="subCategory"
                                     value={form.subCategory}
                                     onChange={handleInputChange}
+                                    className="input-field subCategory"
                                 />
                             </label>
                             <label>
@@ -101,6 +106,7 @@ const AddItems = () => {
                                     name="price"
                                     value={form.price}
                                     onChange={handleInputChange}
+                                    className="input-field price"
                                 />
                             </label>
                             <label>
@@ -110,6 +116,7 @@ const AddItems = () => {
                                     name="date"
                                     value={form.date}
                                     onChange={handleInputChange}
+                                    className="input-field date"
                                 />
                             </label>
                             <div className="popup-buttons">

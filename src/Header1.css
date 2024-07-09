@@ -85,3 +85,63 @@ h1 {
 .logout {
     background-color: #dc3545;
 }
+
+
+.profile-icon {
+    position: relative;
+    cursor: pointer;
+}
+
+.profile-icon span {
+    font-size: 24px;
+}
+
+.profile-icon .profile-image {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.profile-menu {
+    position: absolute;
+    right: 0;
+    top: 100%;
+    background-color: white;
+    border: 1px solid #dee2e6;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+
+.profile-menu .profile-upload {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    background: none;
+    cursor: pointer;
+    text-align: left;
+    border-bottom: 1px solid #dee2e6;
+}
+
+.profile-menu button:hover,
+.profile-menu .profile-upload:hover {
+    background-color: #f1f1f1;
+}
+
+.upload-label {
+    display: block;
+    width: 100%;
+    cursor: pointer;
+}
+
+.profile-upload {
+    text-align: center;
+    background-color: #f8f9fa;
+    padding: 10px;
+}
+
+.profile-upload input[type="file"] {
+    display: none;
+}
