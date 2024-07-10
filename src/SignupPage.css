@@ -8,10 +8,10 @@
 }
 
 .signup-form {
-    display: flex;
+    display: center;
     flex-direction: column;
-    width: 300px;
-    padding: 20px;
+    width: 350px;
+    padding: 50px;
     border: 1px solid #ccc;
     border-radius: 10px;
     background-color: #fff;
@@ -35,10 +35,55 @@
 }
 
 .signup-button {
-    padding: 10px;
+    align-items: cen;
+    padding: 13px;
     border: none;
-    border-radius: 5px;
+    border-radius: 12px;
     background-color: #007bff;
     color: white;
     cursor: pointer;
+}
+
+/* SignupPage.css */
+.signup-container {
+    max-width: 500px;
+    margin: auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    background-color: #f9f9f9;
+}
+
+.signup-form {
+    display: flex;
+    flex-direction: column;
+}
+
+.input-container {
+    margin-bottom: 15px;
+}
+
+.input-container label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+.input-container .required  {
+    color: red;
+}
+
+.input-container .error-message {
+    color: red;
+}
+.input-container .filled  {
+    color: rgb(16, 9, 9);
+}
+.input-field {
+    width: 100%;
+    padding: 10px
+}
+
+.password-field {
+    display: flex;
+    align-items: center;
 }
