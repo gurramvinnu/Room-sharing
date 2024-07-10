@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import './AddMembers.css';
 
 const AddMembers = () => {
@@ -16,11 +16,6 @@ const AddMembers = () => {
         setForm({ ...form, [name]: value });
     };
 
-    const handleAddMember = () => {
-        setMembers([...members, { ...form, id: members.length + 1 }]);
-        setShowPopup(false);
-    };
-
     const handleDeleteMember = (id) => {
         setMembers(members.filter(member => member.id !== id));
     };
@@ -32,6 +27,59 @@ const AddMembers = () => {
             phoneNumber: '',
             joinDate: new Date().toISOString().split('T')[0],
         });
+    };
+
+    const handleAddMember = async () => {
+        const userData = {
+            first_name: form.firstName,
+            last_name: form.lastName,
+            phone: form.phoneNumber,
+            joinDate: form.joinDate
+        };
+        try {
+            const response = await fetch('http://localhost:666/api/signup', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(userData),
+            });
+            if (response.ok) {
+                console.log('User added successfully');
+                setMembers([...members, { ...form, id: members.length + 1 }]);
+                setShowPopup(false);
+                handleReset();
+            } else {
+                console.log('Failed to add user');
+            }         
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    };
+
+    useEffect(() => {
+        handleGetItems();
+    }, []);
+
+    const handleGetItems = async () => {
+        try {
+            const response = await fetch('http://localhost:666/api/getmemberslist', {
+                method: 'post',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                setMembers(data.items);
+                console.log(data.items)
+            } else {
+                console.log('Failed to fetch items');
+            }
+        } catch (error) {
+            console.error('Error:', error);
+        }
     };
 
     const togglePopup = () => {
@@ -59,8 +107,8 @@ const AddMembers = () => {
                     {members.slice(0, 10).map((member, index) => (
                         <tr key={member.id}>
                             <td>{index + 1}</td>
-                            <td>{`${member.firstName} ${member.lastName}`}</td>
-                            <td>{member.phoneNumber}</td>
+                            <td>{`${member.first_name} ${member.last_name}`}</td>
+                            <td>{member.phone}</td>
                             <td>{member.joinDate}</td>
                             <td>
                                 <button onClick={togglePopup}>✏️</button>

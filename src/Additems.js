@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './Additems.css';
 
 const AddItems = () => {
@@ -6,11 +6,10 @@ const AddItems = () => {
     const [items, setItems] = useState([]);
     const [form, setForm] = useState({
         category: 'Select a Type',
-        itemType: '',
-        subCategory: '',
+        sub_category: '',
         quantity: '',
         price: '',
-        date: new Date().toISOString().split('T')[0],
+        date_of_purchase: new Date().toISOString().split('T')[0],
     });
 
     const handleInputChange = (e) => {
@@ -18,11 +17,57 @@ const AddItems = () => {
         setForm({ ...form, [name]: value });
     };
 
-    const handleAddItem = () => {
-        setItems([...items, { ...form, id: items.length + 1 }]);
-        setShowPopup(false);
-        handleReset();
-        
+    const handleAddItem = async () => {
+        const userData = {
+            category: form.category,
+            sub_category: form.sub_category,
+            quantity: form.quantity,
+            price: form.price,
+            date_of_purchase: form.date_of_purchase,
+        };
+        try {
+            const response = await fetch('http://localhost:666/api/additems', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(userData),
+            });
+            if (response.ok) {
+                console.log('User added successfully');
+                setItems([...items, { ...form, id: items.length + 1 }]);
+                setShowPopup(false);
+                handleReset();
+            } else {
+                console.log('Failed to add user');
+            }
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    };
+
+    useEffect(() => {
+        handleGetItems();
+    }, []);
+
+    const handleGetItems = async () => {
+        try {
+            const response = await fetch('http://localhost:666/api/getitems', {
+                method: 'post',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                setItems(data.items);
+            } else {
+                console.log('Failed to fetch items');
+            }
+        } catch (error) {
+            console.error('Error:', error);
+        }
     };
 
     const handleDeleteItem = (id) => {
@@ -68,10 +113,10 @@ const AddItems = () => {
                         <tr key={item.id}>
                             <td>{index + 1}</td>
                             <td>{item.category}</td>
-                            <td>{item.subCategory}</td>
+                            <td>{item.sub_category}</td>
                             <td>{item.quantity}</td>
                             <td>{item.price}</td>
-                            <td>{item.date}</td>
+                            <td>{item.date_of_purchase}</td>
                             <td>
                                 <button className="edit-button" onClick={togglePopup}>✏️</button>
                             </td>
@@ -91,26 +136,26 @@ const AddItems = () => {
                         <form>
                             <label>
                                 Category:
-                               
                                 <select
                                     name="category"
                                     value={form.category}
                                     onChange={handleInputChange}
                                     className="input-field category"
-                                ><option value="Select a Type">Select a Type</option>
+                                >
+                                    <option value="Select a Type">Select a Type</option>
                                     <option value="kirana">Kirana</option>
                                     <option value="vegetable">Vegetable</option>
                                     <option value="milk">Milk</option>
                                     <option value="water">Water</option>
                                 </select>
                             </label>
-                         
+
                             <label>
                                 Sub Category:
                                 <input
                                     type="text"
                                     name="subCategory"
-                                    value={form.subCategory}
+                                    value={form.sub_category}
                                     onChange={handleInputChange}
                                     className="input-field subCategory"
                                 />
@@ -140,7 +185,7 @@ const AddItems = () => {
                                 <input
                                     type="date"
                                     name="date"
-                                    value={form.date}
+                                    value={form.date_of_purchase}
                                     onChange={handleInputChange}
                                     className="input-field date"
                                 />
