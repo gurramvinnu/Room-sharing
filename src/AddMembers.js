@@ -37,7 +37,7 @@ const AddMembers = () => {
             joinDate: form.joinDate
         };
         try {
-            const response = await fetch('http://localhost:666/api/signup', {
+            const response = await fetch('https://back-end-room-sharing.onrender.com/api/signup', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -63,7 +63,7 @@ const AddMembers = () => {
 
     const handleGetItems = async () => {
         try {
-            const response = await fetch('http://localhost:666/api/getmemberslist', {
+            const response = await fetch('https://back-end-room-sharing.onrender.com/api/getmemberslist', {
                 method: 'post',
                 headers: {
                     'Content-Type': 'application/json',

@@ -26,7 +26,7 @@ const AddItems = () => {
             date_of_purchase: form.date_of_purchase,
         };
         try {
-            const response = await fetch('http://localhost:666/api/additems', {
+            const response = await fetch('https://back-end-room-sharing.onrender.com/api/additems', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -52,7 +52,7 @@ const AddItems = () => {
 
     const handleGetItems = async () => {
         try {
-            const response = await fetch('http://localhost:666/api/getitems', {
+            const response = await fetch('https://back-end-room-sharing.onrender.com/api/getitems', {
                 method: 'post',
                 headers: {
                     'Content-Type': 'application/json',
