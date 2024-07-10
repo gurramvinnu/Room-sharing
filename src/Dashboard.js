@@ -3,10 +3,10 @@ import { Pie } from 'react-chartjs-2';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 import './Dashboard.css';
 
-ChartJS.register(ArcElement, Tooltip, Legend);
+ChartJS.register( Tooltip, Legend,ArcElement);
 
 const data = {
-    labels: ['Prudhvi', 'Verra Reddy', 'Ramesh', 'Saikrishna', 'Dayan', 'Vinnu'],
+    
     datasets: [
         {
             data: [50, 15, 12, 15, 13, 5],
@@ -27,7 +27,8 @@ const data = {
                 '#FF9F40'
             ]
         }
-    ]
+    ],
+    labels: ['Prudhvi', 'Verra Reddy', 'Ramesh', 'Saikrishna', 'Dayan', 'Vinnu']
 };
 
 const Dashboard = () => {

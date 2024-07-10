@@ -63,10 +63,10 @@ const AddMembers = () => {
                             <td>{member.phoneNumber}</td>
                             <td>{member.joinDate}</td>
                             <td>
-                                <button>Edit</button>
+                                <button onClick={togglePopup}>✏️</button>
                             </td>
                             <td>
-                                <button onClick={() => handleDeleteMember(member.id)}>Delete</button>
+                                <button onClick={() => handleDeleteMember(member.id)}>🗑️</button>
                             </td>
                         </tr>
                     ))}

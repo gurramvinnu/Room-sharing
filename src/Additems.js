@@ -5,8 +5,10 @@ const AddItems = () => {
     const [showPopup, setShowPopup] = useState(false);
     const [items, setItems] = useState([]);
     const [form, setForm] = useState({
-        category: 'kirana',
+        category: 'Select a Type',
+        itemType: '',
         subCategory: '',
+        quantity: '',
         price: '',
         date: new Date().toISOString().split('T')[0],
     });
@@ -19,6 +21,8 @@ const AddItems = () => {
     const handleAddItem = () => {
         setItems([...items, { ...form, id: items.length + 1 }]);
         setShowPopup(false);
+        handleReset();
+        
     };
 
     const handleDeleteItem = (id) => {
@@ -27,8 +31,10 @@ const AddItems = () => {
 
     const handleReset = () => {
         setForm({
-            category: 'kirana',
+            category: 'Select a Type',
+            itemType: '',
             subCategory: '',
+            quantity: '',
             price: '',
             date: new Date().toISOString().split('T')[0],
         });
@@ -48,9 +54,12 @@ const AddItems = () => {
                 <thead>
                     <tr>
                         <th>S.No</th>
+                        <th>Item Type</th>
                         <th>Item Name</th>
+                        <th>Quantity</th>
                         <th>Price</th>
-                        <th>Date</th>
+                        <th>Date of Purchase</th>
+                        <th>Edit</th>
                         <th>Delete</th>
                     </tr>
                 </thead>
@@ -58,11 +67,16 @@ const AddItems = () => {
                     {items.slice(0, 10).map((item, index) => (
                         <tr key={item.id}>
                             <td>{index + 1}</td>
+                            <td>{item.category}</td>
                             <td>{item.subCategory}</td>
+                            <td>{item.quantity}</td>
                             <td>{item.price}</td>
                             <td>{item.date}</td>
                             <td>
-                                <button onClick={() => handleDeleteItem(item.id)}>Delete</button>
+                                <button className="edit-button" onClick={togglePopup}>✏️</button>
+                            </td>
+                            <td>
+                                <button className="delete-button" onClick={() => handleDeleteItem(item.id)}>🗑️</button>
                             </td>
                         </tr>
                     ))}
@@ -77,18 +91,20 @@ const AddItems = () => {
                         <form>
                             <label>
                                 Category:
+                               
                                 <select
                                     name="category"
                                     value={form.category}
                                     onChange={handleInputChange}
                                     className="input-field category"
-                                >
+                                ><option value="Select a Type">Select a Type</option>
                                     <option value="kirana">Kirana</option>
                                     <option value="vegetable">Vegetable</option>
                                     <option value="milk">Milk</option>
                                     <option value="water">Water</option>
                                 </select>
                             </label>
+                         
                             <label>
                                 Sub Category:
                                 <input
@@ -97,6 +113,16 @@ const AddItems = () => {
                                     value={form.subCategory}
                                     onChange={handleInputChange}
                                     className="input-field subCategory"
+                                />
+                            </label>
+                            <label>
+                                Quantity:
+                                <input
+                                    type="number"
+                                    name="quantity"
+                                    value={form.quantity}
+                                    onChange={handleInputChange}
+                                    className="input-field quantity"
                                 />
                             </label>
                             <label>
@@ -110,7 +136,7 @@ const AddItems = () => {
                                 />
                             </label>
                             <label>
-                                Date:
+                                Date of Purchase:
                                 <input
                                     type="date"
                                     name="date"

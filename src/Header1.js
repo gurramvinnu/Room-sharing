@@ -5,6 +5,7 @@ import './Header1.css';
 const Header = () => {
     const [showMenu, setShowMenu] = useState(false);
     const [profileMenuOpen, setProfileMenuOpen] = useState(false);
+    const [editProfileOpen, setEditProfileOpen] = useState(false);
     const [profileImage, setProfileImage] = useState(null);
     const profileMenuRef = useRef(null);
 
@@ -40,6 +41,14 @@ const Header = () => {
         };
     }, []);
 
+    const openEditProfile = () => {
+        setEditProfileOpen(true);
+    };
+
+    const closeEditProfile = () => {
+        setEditProfileOpen(false);
+    };
+
     return (
         <div className="header">
             <div className="menu-icon" onClick={toggleMenu}>&#9776;</div>
@@ -54,10 +63,10 @@ const Header = () => {
             {showMenu && (
                 <div className="context-menu">
                     <ul>
-                        <li><Link to="/" onClick={() => setShowMenu(false)}>Dashboard</Link></li>
-                        <li><Link to="/add-items" onClick={() => setShowMenu(false)}>Add Items</Link></li>
-                        <li><Link to="/add-members" onClick={() => setShowMenu(false)}>Add Members</Link></li>
-                        <li><Link to="/settings" onClick={() => setShowMenu(false)}>Settings</Link></li>
+                        <li><Link to="/" onClick={() => setShowMenu(false)}>📊 Dashboard</Link></li>
+                        <li><Link to="/add-items" onClick={() => setShowMenu(false)}>🛒 Add Items</Link></li>
+                        <li><Link to="/add-members" onClick={() => setShowMenu(false)}>🙋‍♂️ Add Members</Link></li>
+                        <li><Link to="/settings" onClick={() => setShowMenu(false)}>⚙️ Settings</Link></li>
                     </ul>
                 </div>
             )}
@@ -68,7 +77,12 @@ const Header = () => {
                             {profileImage ? (
                                 <img src={profileImage} alt="Profile" className="profile-image" />
                             ) : (
-                                <span>Upload Image</span>
+                                <div >
+                                <img
+                                  
+                                  alt="📤 Upload Image"
+                                />
+                              </div>
                             )}
                         </label>
                         <input
@@ -79,8 +93,42 @@ const Header = () => {
                             style={{ display: 'none' }}
                         />
                     </div>
-                    <button className="edit-profile">Edit Profile</button>
+                    <button className="edit-profile" onClick={openEditProfile}>🙎🏻‍♂️ Edit Profile</button>
                     <button className="logout">Log Out</button>
+                </div>
+            )}
+            {editProfileOpen && (
+                <div className="edit-profile-popup">
+                    <div className="edit-profile-content">
+                        <button className="close-btn" onClick={closeEditProfile}>&times;</button>
+                        <h2>Edit Profile</h2>
+                        <form>
+                            <div className="form-group">
+                                <label>First Name</label>
+                                <input type="text" className="form-control" />
+                            </div>
+                            <div className="form-group">
+                                <label>Last Name</label>
+                                <input type="text" className="form-control" />
+                            </div>
+                            <div className="form-group">
+                                <label>Phone Number</label>
+                                <input type="tel" className="form-control" />
+                            </div>
+                            <div className="form-group">
+                                <label>Email</label>
+                                <input type="email" className="form-control" />
+                            </div>
+                            <div className="form-group">
+                                <label>Room ID</label>
+                                <input type="text" className="form-control" />
+                            </div>
+                            <div className="form-buttons">
+                                <button type="button" className="reset-btn">Reset</button>
+                                <button type="submit" className="update-btn">Update</button>
+                            </div>
+                        </form>
+                    </div>
                 </div>
             )}
         </div>
