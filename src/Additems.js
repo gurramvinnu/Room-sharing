@@ -88,7 +88,39 @@ const AddItems = () => {
     const togglePopup = () => {
         setShowPopup(!showPopup);
     };
+    const editPopup = async (_id) => {
+        const newShowPopup = !showPopup;
+        setShowPopup(newShowPopup);
+        if (_id) { 
+            try {
+                const response = await fetch('http://localhost:666/api/getitemssdetails', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ _id: _id }) 
+                });
+    
+                if (response.ok) {
+                    const data = await response.json();
+                    setForm({
 
+                        category: data.items.category,
+                        sub_category: data.items.sub_category,
+                        quantity: data.items.quantity,
+                        price: data.items.price,
+                        date_of_purchase: data.items.date_of_purchase,
+                       
+                    });
+                }
+                 else {
+                    console.log('Failed to fetch items');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        }
+    };
     return (
         <div className="add-items">
             <button className="add-item-button" onClick={togglePopup}>
@@ -118,7 +150,7 @@ const AddItems = () => {
                             <td>{item.price}</td>
                             <td>{item.date_of_purchase}</td>
                             <td>
-                                <button className="edit-button" onClick={togglePopup}>✏️</button>
+                                <button className="edit-button" onClick={() => editPopup(item._id)}>✏️</button>
                             </td>
                             <td>
                                 <button className="delete-button" onClick={() => handleDeleteItem(item.id)}>🗑️</button>

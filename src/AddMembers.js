@@ -71,7 +71,7 @@ const AddMembers = () => {
             });
 
             if (response.ok) {
-                const data = await response.json();
+                const data = await response.json();              
                 setMembers(data.items);
                 console.log(data.items)
             } else {
@@ -81,10 +81,42 @@ const AddMembers = () => {
             console.error('Error:', error);
         }
     };
-
-    const togglePopup = () => {
-        setShowPopup(!showPopup);
+    const togglePopup = async () => {
+        handleReset();
+        const newShowPopup = !showPopup;
+        setShowPopup(newShowPopup);
+    }
+    const editPopup = async (phone) => {
+        const newShowPopup = !showPopup;
+        setShowPopup(newShowPopup);
+        if (phone) { 
+            try {
+                const response = await fetch('http://localhost:666/api/getmembersdetails', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ phone: phone }) 
+                });
+    
+                if (response.ok) {
+                    const data = await response.json();
+                    setForm({
+                        firstName: data.items.first_name,
+                        lastName: data.items.last_name,
+                        phoneNumber: data.items.phone,
+                        joinDate: data.items.joinDate
+                    });
+                }
+                 else {
+                    console.log('Failed to fetch items');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        }
     };
+    
 
     return (
         <div className="add-members">
@@ -111,7 +143,7 @@ const AddMembers = () => {
                             <td>{member.phone}</td>
                             <td>{member.joinDate}</td>
                             <td>
-                                <button onClick={togglePopup}>✏️</button>
+                                <button onClick={() =>editPopup(member.phone)}>✏️</button>
                             </td>
                             <td>
                                 <button onClick={() => handleDeleteMember(member.id)}>🗑️</button>
