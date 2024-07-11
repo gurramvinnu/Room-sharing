@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState,useRef } from 'react';
 import './Additems.css';
 
 const AddItems = () => {
@@ -11,10 +11,30 @@ const AddItems = () => {
         price: '',
         date_of_purchase: new Date().toISOString().split('T')[0],
     });
-
+localStorage.setItem("purchaseby","sai")
     const handleInputChange = (e) => {
         const { name, value } = e.target;
         setForm({ ...form, [name]: value });
+    };
+    const profileMenuRef = useRef(null);
+    const handleClickOutside = (event) => {
+        if (profileMenuRef.current && !profileMenuRef.current.contains(event.target)) {
+            setShowPopup(showPopup);
+        }
+    };
+    
+    useEffect(() => {
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, []);
+    const formatDate = (dateString) => {
+        const date = new Date(dateString);
+        const day = String(date.getDate()).padStart(2, '0');
+        const month = String(date.getMonth() + 1).padStart(2, '0'); 
+        const year = date.getFullYear();
+        return `${day}/${month}/${year}`;
     };
 
     const handleAddItem = async () => {
@@ -24,9 +44,11 @@ const AddItems = () => {
             quantity: form.quantity,
             price: form.price,
             date_of_purchase: form.date_of_purchase,
+            room_id:localStorage.getItem('room_id'),
+            purchaseby:localStorage.getItem("purchaseby")
         };
         try {
-            const response = await fetch('https://back-end-room-sharing.onrender.com/api/additems', {
+            const response = await fetch('http://localhost:666/api/additems', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -47,16 +69,19 @@ const AddItems = () => {
     };
 
     useEffect(() => {
-        handleGetItems();
+        const room_id=localStorage.getItem('room_id')
+        handleGetItems(room_id);
     }, []);
 
-    const handleGetItems = async () => {
+    const handleGetItems = async (room_idObj) => {
         try {
-            const response = await fetch('https://back-end-room-sharing.onrender.com/api/getitems', {
+            const response = await fetch('http://localhost:666/api/getitems', {
                 method: 'post',
                 headers: {
                     'Content-Type': 'application/json',
                 },
+                body: JSON.stringify(room_idObj),
+                
             });
 
             if (response.ok) {
@@ -136,6 +161,7 @@ const AddItems = () => {
                         <th>Quantity</th>
                         <th>Price</th>
                         <th>Date of Purchase</th>
+                        <th>Purchase by</th>
                         <th>Edit</th>
                         <th>Delete</th>
                     </tr>
@@ -148,7 +174,8 @@ const AddItems = () => {
                             <td>{item.sub_category}</td>
                             <td>{item.quantity}</td>
                             <td>{item.price}</td>
-                            <td>{item.date_of_purchase}</td>
+                            <td>{formatDate(item.date_of_purchase)}</td>
+                            <td>{localStorage.getItem("purchaseby")}</td>
                             <td>
                                 <button className="edit-button" onClick={() => editPopup(item._id)}>✏️</button>
                             </td>
@@ -161,8 +188,8 @@ const AddItems = () => {
             </table>
 
             {showPopup && (
-                <div className="popup">
-                    <div className="popup-content">
+                <div className="popup" >
+                    <div className="popup-content" ref={profileMenuRef}>
                         <span className="close-icon" onClick={togglePopup}>&times;</span>
                         <h2>Add New Item</h2>
                         <form>

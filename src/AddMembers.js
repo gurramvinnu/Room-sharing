@@ -10,7 +10,7 @@ const AddMembers = () => {
         phoneNumber: '',
         joinDate: new Date().toISOString().split('T')[0],
     });
-
+    localStorage.setItem("room_id","12345")
     const handleInputChange = (e) => {
         const { name, value } = e.target;
         setForm({ ...form, [name]: value });
@@ -34,7 +34,8 @@ const AddMembers = () => {
             first_name: form.firstName,
             last_name: form.lastName,
             phone: form.phoneNumber,
-            joinDate: form.joinDate
+            joinDate: form.joinDate,
+            room_id:localStorage.getItem('room_id')
         };
         try {
             const response = await fetch('https://back-end-room-sharing.onrender.com/api/signup', {
@@ -57,17 +58,26 @@ const AddMembers = () => {
         }
     };
 
+    const formatDate = (dateString) => {
+        const date = new Date(dateString);
+        const day = String(date.getDate()).padStart(2, '0');
+        const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are zero-based
+        const year = date.getFullYear();
+        return `${day}/${month}/${year}`;
+    };
     useEffect(() => {
-        handleGetItems();
+        const room_id="12345"
+        handleGetItems({ room_id });
     }, []);
 
-    const handleGetItems = async () => {
+    const handleGetItems = async (room_idObj) => {
         try {
-            const response = await fetch('https://back-end-room-sharing.onrender.com/api/getmemberslist', {
+            const response = await fetch('http://localhost:666/api/getmemberslist', {
                 method: 'post',
                 headers: {
                     'Content-Type': 'application/json',
                 },
+                body: JSON.stringify(room_idObj),
             });
 
             if (response.ok) {
@@ -98,14 +108,14 @@ const AddMembers = () => {
                     },
                     body: JSON.stringify({ phone: phone }) 
                 });
-    
                 if (response.ok) {
                     const data = await response.json();
                     setForm({
                         firstName: data.items.first_name,
                         lastName: data.items.last_name,
                         phoneNumber: data.items.phone,
-                        joinDate: data.items.joinDate
+                        joinDate: data.items.joinDate,
+                        room_id:data.items.room_id
                     });
                 }
                  else {
@@ -141,7 +151,7 @@ const AddMembers = () => {
                             <td>{index + 1}</td>
                             <td>{`${member.first_name} ${member.last_name}`}</td>
                             <td>{member.phone}</td>
-                            <td>{member.joinDate}</td>
+                            <td>{formatDate(member.joinDate)}</td>
                             <td>
                                 <button onClick={() =>editPopup(member.phone)}>✏️</button>
                             </td>
@@ -156,6 +166,7 @@ const AddMembers = () => {
             {showPopup && (
                 <div className="popup">
                     <div className="popup-content">
+                    <div class="input-field">
                         <span className="close-icon" onClick={togglePopup}>&times;</span>
                         <h2>Add New Member</h2>
                         <form>
@@ -199,11 +210,13 @@ const AddMembers = () => {
                                     className="input-field"
                                 />
                             </label>
+                            
                             <div className="popup-buttons">
                                 <button type="button" onClick={handleReset}>Reset</button>
                                 <button type="button" onClick={handleAddMember}>Submit</button>
                             </div>
                         </form>
+                    </div>
                     </div>
                 </div>
             )}

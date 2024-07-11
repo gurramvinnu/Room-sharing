@@ -60,23 +60,23 @@ button:hover {
 
 .popup-content {
     background-color: white;
-    padding: 20px;
-    border-radius: 10px;
-    width: 300px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    padding: 250px;
+    border-radius: 20px;
+    width: 350px;
+    box-shadow: 0 5px 100px rgba(126, 64, 64, 0.1);
     position: relative;
 }
 
 .popup-content .close-icon {
     position: absolute;
-    top: 10px;
-    right: 10px;
-    font-size: 24px;
+    top: 5px;
+    right: 25px;
+    font-size: 90px;
     cursor: pointer;
 }
 
 .popup-content h2 {
-    margin-top: 0;
+    margin-top: 10;
 }
 
 .popup-content form label {
@@ -84,14 +84,22 @@ button:hover {
     margin-bottom: 10px;
 }
 
+.popup-content form {
+    border: 2px solid #ccc; /* Add border to the form */
+    padding: 20px; /* Add padding inside the form */
+    border-radius: 16px; /* Optional: Add border-radius to the form */
+}
+
 .popup-content form .input-field {
     width: 100%;
     padding: 8px;
-    margin-top: 5px;
-    margin-bottom: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
+    margin-top: 10px;
+    margin-bottom: 20px;
+    border: 2px solid #ccc;
+    border-radius: 50px;
+    font-size: 1.2em; /* Increase the text size */
 }
+
 
 .popup-buttons {
     display: flex;

@@ -4,7 +4,7 @@ const Settings = () => {
     return (
         <div>
             <h2>Settings</h2>
-            <p>Here you can change settings.</p>
+            <p>phase 2 update coming soon.</p>
         </div>
     );
 }

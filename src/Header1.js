@@ -49,10 +49,15 @@ const Header = () => {
         setEditProfileOpen(false);
     };
 
+    const offProfile= () =>{
+        window.location.href = '/login';
+    }
+
     return (
         <div className="header">
             <div className="menu-icon" onClick={toggleMenu}>&#9776;</div>
             <h1>Room Sharing</h1>
+            <h3>Room_id :: {localStorage.getItem("room_id")}</h3>
             <div className="profile-icon" onClick={toggleProfileMenu}>
                 {profileImage ? (
                     <img src={profileImage} alt="Profile" className="profile-image" />
@@ -63,13 +68,14 @@ const Header = () => {
             {showMenu && (
                 <div className="context-menu">
                     <ul>
-                        <li><Link to="/" onClick={() => setShowMenu(false)}>📊 Dashboard</Link></li>
-                        <li><Link to="/add-items" onClick={() => setShowMenu(false)}>🛒 Add Items</Link></li>
-                        <li><Link to="/add-members" onClick={() => setShowMenu(false)}>🙋‍♂️ Add Members</Link></li>
-                        <li><Link to="/settings" onClick={() => setShowMenu(false)}>⚙️ Settings</Link></li>
+                        <li onClick={() => setShowMenu(false)}><Link to="/">📊 Dashboard</Link></li>
+                        <li onClick={() => setShowMenu(false)}><Link to="/add-items">🛒 Add Items</Link></li>
+                        <li onClick={() => setShowMenu(false)}><Link to="/add-members">🙋‍♂️ Add Members</Link></li>
+                        <li onClick={() => setShowMenu(false)}><Link to="/settings">⚙️ Settings</Link></li>
                     </ul>
                 </div>
             )}
+
             {profileMenuOpen && (
                 <div className="profile-menu" ref={profileMenuRef}>
                     <div className="profile-upload">
@@ -78,11 +84,11 @@ const Header = () => {
                                 <img src={profileImage} alt="Profile" className="profile-image" />
                             ) : (
                                 <div >
-                                <img
-                                  
-                                  alt="📤 Upload Image"
-                                />
-                              </div>
+                                    <img
+
+                                        alt="📤 Upload Image"
+                                    />
+                                </div>
                             )}
                         </label>
                         <input
@@ -94,7 +100,7 @@ const Header = () => {
                         />
                     </div>
                     <button className="edit-profile" onClick={openEditProfile}>🙎🏻‍♂️ Edit Profile</button>
-                    <button className="logout">Log Out</button>
+                    <button className="logout" onClick={offProfile}>Log Out</button>
                 </div>
             )}
             {editProfileOpen && (

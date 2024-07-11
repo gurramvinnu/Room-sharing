@@ -35,7 +35,7 @@ const LoginPage = () => {
 
             if (response.ok && result.status) {
                 console.log('Login successful:', result);
-                
+                localStorage.setItem("room_id","12345")
                 window.location.href = '/';
             } else {
                 setErrorMessage(result.msg || 'Login failed');
