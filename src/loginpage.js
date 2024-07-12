@@ -37,6 +37,7 @@ const LoginPage = () => {
                 console.log('Login successful:', result);
                 localStorage.setItem("room_id",result?.user.room_id )
                 localStorage.setItem("Loginname",result?.user.first_name )
+                localStorage.setItem("phone",result?.user.phone)
                 window.location.href = '/';
             } else {
                 setErrorMessage(result.msg || 'Login failed');

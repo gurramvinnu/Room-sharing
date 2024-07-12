@@ -43,7 +43,15 @@
     color: white;
     cursor: pointer;
 }
-
+.backup-button {
+    align-items: left;
+    padding: 15px;
+    border: none;
+    border-radius: 15px;
+    
+    color: rgb(30, 28, 28);
+    cursor: pointer;
+}
 /* SignupPage.css */
 .signup-container {
     max-width: 500px;

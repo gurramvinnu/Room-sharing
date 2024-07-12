@@ -1,10 +1,12 @@
 import React, { useState, useEffect, useRef } from 'react';
 import './AddMembers.css';
+import ShimmerRow from './ShimmerRow';
 
 const AddMembers = () => {
     const room_id = localStorage.getItem("room_id");
     const [showPopup, setShowPopup] = useState(false);
     const [members, setMembers] = useState([]);
+    const [loading, setLoading] = useState(true);
     const [form, setForm] = useState({
         _id: "",
         firstName: '',
@@ -31,7 +33,6 @@ const AddMembers = () => {
         const { name, value } = e.target;
         setForm({ ...form, [name]: value });
     };
-
 
     const handleReset = () => {
         setForm({
@@ -78,12 +79,14 @@ const AddMembers = () => {
         const year = date.getFullYear();
         return `${day}/${month}/${year}`;
     };
+    
     useEffect(() => {
         const room_id = localStorage.getItem("room_id");
         handleGetmember({ room_id });
     }, []);
 
     const handleGetmember = async (room_idObj) => {
+        setLoading(true);
         try {
             const response = await fetch('https://back-end-room-sharing.onrender.com/api/getmemberslist', {
                 method: 'post',
@@ -96,19 +99,23 @@ const AddMembers = () => {
             if (response.ok) {
                 const data = await response.json();
                 setMembers(data.items);
-                console.log(data.items)
+                setLoading(false);
             } else {
                 console.log('Failed to fetch items');
+                setLoading(false);
             }
         } catch (error) {
             console.error('Error:', error);
+            setLoading(false);
         }
     };
+
     const togglePopup = async () => {
         handleReset();
         const newShowPopup = !showPopup;
         setShowPopup(newShowPopup);
     }
+
     const editPopup = async (phone) => {
         const newShowPopup = !showPopup;
         setShowPopup(newShowPopup);
@@ -140,6 +147,7 @@ const AddMembers = () => {
             }
         }
     };
+
     const handleDeleteMember = async (phone) => {
         try {
             const response = await fetch('https://back-end-room-sharing.onrender.com/api/deletemember', {
@@ -156,8 +164,8 @@ const AddMembers = () => {
         } catch (error) {
             console.error('Error:', error);
         }
-
     };
+
     const handleupdateItem = async (id) => {
         const updateData = {
             _id:form._id,
@@ -199,7 +207,6 @@ const AddMembers = () => {
         }
     };
 
-
     return (
         <div className="add-members">
             <button className="add-member-button" onClick={togglePopup}>
@@ -218,20 +225,29 @@ const AddMembers = () => {
                     </tr>
                 </thead>
                 <tbody>
-                    {members.slice(0, 10).map((member, index) => (
-                        <tr key={member.id}>
-                            <td>{index + 1}</td>
-                            <td>{`${member.first_name} ${member.last_name}`}</td>
-                            <td>{member.phone}</td>
-                            <td>{formatDate(member.joinDate)}</td>
-                            <td>
-                                <button onClick={() => editPopup(member.phone)}>✏️</button>
-                            </td>
-                            <td>
-                                <button onClick={() => handleDeleteMember(member.phone)} >🗑️</button>
-                            </td>
-                        </tr>
-                    ))}
+                    {loading ? (
+                        <>
+                            <ShimmerRow />
+                            <ShimmerRow />
+                            <ShimmerRow />
+                            <ShimmerRow />
+                        </>
+                    ) : (
+                        members.slice(0, 10).map((member, index) => (
+                            <tr key={member.id}>
+                                <td>{index + 1}</td>
+                                <td>{`${member.first_name} ${member.last_name}`}</td>
+                                <td>{member.phone}</td>
+                                <td>{formatDate(member.joinDate)}</td>
+                                <td>
+                                    <button onClick={() => editPopup(member.phone)}>✏️</button>
+                                </td>
+                                <td>
+                                    <button onClick={() => handleDeleteMember(member.phone)} >🗑️</button>
+                                </td>
+                            </tr>
+                        ))
+                    )}
                 </tbody>
             </table>
 
@@ -285,7 +301,7 @@ const AddMembers = () => {
 
                                 <div className="popup-buttons">
                                     <button type="button" onClick={handleReset}>Reset</button>
-                                    <button type="button" onClick={() => form._id ? handleupdateItem(form._id) : handleAddMember()}>{form._id ? "update" : "submit"}</button>
+                                    <button type="button" onClick={() => form._id ? handleupdateItem(form._id) : handleAddMember()}>{form._id ? "Update" : "Submit"}</button>
                                 </div>
                             </form>
                         </div>

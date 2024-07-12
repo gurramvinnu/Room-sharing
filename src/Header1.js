@@ -4,13 +4,24 @@ import Shimmer from './Shimmer'; // Import the Shimmer component
 import './Header1.css';
 
 const Header = () => {
+    const phone=localStorage.getItem("phone");
     const [showMenu, setShowMenu] = useState(false);
     const [profileMenuOpen, setProfileMenuOpen] = useState(false);
     const [editProfileOpen, setEditProfileOpen] = useState(false);
     const [profileImage, setProfileImage] = useState(null);
     const profileMenuRef = useRef(null);
+    const menuRef = useRef(null);
     const [roomId, setRoomId] = useState('');
     const [loading, setLoading] = useState(true); // State to track loading
+    const [form, setForm] = useState({
+        _id: '',
+        firstName: '',
+        lastName: '',
+        phoneNumber: '',
+        joinDate: '',
+        room_id: ''
+    });
+    const [showPopup, setShowPopup] = useState(false);
 
     useEffect(() => {
         const id = localStorage.getItem('room_id');
@@ -38,6 +49,9 @@ const Header = () => {
     };
 
     const handleClickOutside = (event) => {
+        if (menuRef.current && !menuRef.current.contains(event.target)) {
+            setShowMenu(false);
+        }
         if (profileMenuRef.current && !profileMenuRef.current.contains(event.target)) {
             setProfileMenuOpen(false);
         }
@@ -51,6 +65,7 @@ const Header = () => {
     }, []);
 
     const openEditProfile = () => {
+        editPopup(phone)
         setEditProfileOpen(true);
     };
 
@@ -62,8 +77,90 @@ const Header = () => {
         window.location.href = '/login';
     };
 
+    const editPopup = async (phone) => {
+        const newShowPopup = !showPopup;
+        setShowPopup(newShowPopup);
+        if (phone) {
+            try {
+                const response = await fetch('https://back-end-room-sharing.onrender.com/api/getmembersdetails', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ phone: phone })
+                });
+                if (response.ok) {
+                    const data = await response.json();
+                    setForm({
+                        _id: data.items._id,
+                        firstName: data.items.first_name,
+                        lastName: data.items.last_name,
+                        phoneNumber: data.items.phone,
+                        joinDate: data.items.joinDate,
+                        room_id: data.items.room_id
+                    });
+                } else {
+                    console.log('Failed to fetch items');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        }
+    };
+
+    const handleUpdateItem = async () => {
+        const updateData = {
+            _id: form._id,
+            first_name: form.firstName,
+            last_name: form.lastName,
+            phone: form.phoneNumber,
+            joinDate: form.joinDate,
+            room_id: localStorage.getItem('room_id')
+        };
+
+        try {
+            const response = await fetch('https://back-end-room-sharing.onrender.com/api/updatemember', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(updateData),
+            });
+
+            if (response.ok) {
+                
+                setShowPopup(!showPopup);
+                handleReset();
+                const data = await response.json();
+                setForm({
+                    _id: data.items._id,
+                    firstName: data.items.first_name,
+                    lastName: data.items.last_name,
+                    phoneNumber: data.items.phone,
+                    joinDate: data.items.joinDate,
+                    room_id: data.items.room_id
+                });
+            } else {
+                console.log('Failed to update item');
+            }
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    };
+
+    const handleReset = () => {
+        setForm({
+            _id: '',
+            firstName: '',
+            lastName: '',
+            phoneNumber: '',
+            joinDate: '',
+            room_id: ''
+        });
+    };
+
     if (loading) {
-        return <Shimmer />; // Show shimmer effect while loading
+        return <Shimmer />;
     }
 
     return (
@@ -81,7 +178,7 @@ const Header = () => {
                 )}
             </div>
             {showMenu && (
-                <div className="context-menu">
+                <div className="context-menu" ref={menuRef}>
                     <ul>
                         <li onClick={() => setShowMenu(false)}><Link to="/">📊 Dashboard</Link></li>
                         <li onClick={() => setShowMenu(false)}><Link to="/add-items">🛒 Add Items</Link></li>
@@ -122,29 +219,55 @@ const Header = () => {
                                 style={{ display: 'none' }}
                             />
                         </div>
-                        <form>
+                        <form onSubmit={(e) => { e.preventDefault(); handleUpdateItem(); }}>
                             <div className="form-group">
                                 <label>First Name</label>
-                                <input type="text" className="form-control" />
+                                <input
+                                    type="text"
+                                    className="form-control"
+                                    value={form.firstName}
+                                    onChange={(e) => setForm({ ...form, firstName: e.target.value })}
+                                />
                             </div>
                             <div className="form-group">
                                 <label>Last Name</label>
-                                <input type="text" className="form-control" />
+                                <input
+                                    type="text"
+                                    className="form-control"
+                                    value={form.lastName}
+                                    onChange={(e) => setForm({ ...form, lastName: e.target.value })}
+                                />
                             </div>
                             <div className="form-group">
                                 <label>Phone Number</label>
-                                <input type="tel" className="form-control" />
+                                <input
+                                    type="tel"
+                                    className="form-control"
+                                    value={form.phoneNumber}
+                                    onChange={(e) => setForm({ ...form, phoneNumber: e.target.value })}
+                                />
                             </div>
                             <div className="form-group">
                                 <label>Email</label>
-                                <input type="email" className="form-control" />
+                                <input
+                                    type="email"
+                                    className="form-control"
+                                    value={form.email}
+                                    onChange={(e) => setForm({ ...form, email: e.target.value })}
+                                />
                             </div>
                             <div className="form-group">
                                 <label>Room ID</label>
-                                <input type="text" className="form-control" />
+                                <input
+                                    type="text"
+                                    className="form-control"
+                                    value={form.room_id}
+                                    onChange={(e) => setForm({ ...form, room_id: e.target.value })}
+                                    disabled
+                                />
                             </div>
                             <div className="form-buttons">
-                                <button type="button" className="reset-btn">Reset</button>
+                                <button type="button" className="reset-btn" onClick={closeEditProfile}>close</button>
                                 <button type="submit" className="update-btn">Update</button>
                             </div>
                         </form>

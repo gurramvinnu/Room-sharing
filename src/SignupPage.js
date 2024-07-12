@@ -120,6 +120,9 @@ const SignupPage = () => {
         }
 
     };
+    const back=()=>{
+        window.location.href = '/login'
+    }
 
     return (
         <div className="signup-container">
@@ -227,7 +230,9 @@ const SignupPage = () => {
                     {confirmPasswordError && <p className="error-message">{confirmPassword?"":confirmPasswordError}</p>}
                 </div>
                 <button type="submit" className="signup-button">Sign Up</button>
+                <div  className="backup-button" onClick={back}>Back to login</div>
             </form>
+            
         </div>
     );
 };

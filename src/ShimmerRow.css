@@ -1,0 +1,17 @@
+.shimmer-row .shimmer-cell {
+    width: 100%;
+    height: 20px;
+    background: #f6f7f8;
+    background: linear-gradient(to right, #eeeeee 8%, #dddddd 18%, #eeeeee 33%);
+    animation: shimmer 1.5s infinite linear;
+    border-radius: 4px;
+}
+
+@keyframes shimmer {
+    0% {
+        background-position: -468px 0;
+    }
+    100% {
+        background-position: 468px 0;
+    }
+}
