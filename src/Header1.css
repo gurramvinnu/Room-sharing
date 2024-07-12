@@ -251,3 +251,53 @@ h2 {
 .context-menu li:hover {
     background-color: #f0f0f0; 
 }
+
+body {
+    margin: 0;
+    padding: 0;
+}
+
+.headerroom {
+    width: 10%;
+    display: flex;
+    justify-content: flex-end;
+    padding: 2px;
+    background-color: #f1f1f1;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.header h3 {
+    margin: 0;
+    padding: 0;
+}
+
+/* Header1.css */
+
+.shimmer-wrapper {
+    position: relative;
+    overflow: hidden;
+}
+
+.shimmer {
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to right, #f0f0f0 0%, #e0e0e0 50%, #f0f0f0 100%);
+    animation: shimmer 2s infinite;
+}
+
+@keyframes shimmer {
+    0% {
+        transform: translateX(-100%);
+    }
+    100% {
+        transform: translateX(100%);
+    }
+}
+
+.shimmer-content {
+    background: #e0e0e0;
+    border-radius: 4px;
+}

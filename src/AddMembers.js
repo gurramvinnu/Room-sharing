@@ -1,27 +1,41 @@
-import React, { useState,useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import './AddMembers.css';
 
 const AddMembers = () => {
+    const room_id = localStorage.getItem("room_id");
     const [showPopup, setShowPopup] = useState(false);
     const [members, setMembers] = useState([]);
     const [form, setForm] = useState({
+        _id: "",
         firstName: '',
         lastName: '',
         phoneNumber: '',
         joinDate: new Date().toISOString().split('T')[0],
     });
-    localStorage.setItem("room_id","12345")
+    const profileMenuRef = useRef(null);
+
+    const handleClickOutside = (event) => {
+        if (profileMenuRef.current && !profileMenuRef.current.contains(event.target)) {
+            setShowPopup(showPopup);
+        }
+    };
+
+    useEffect(() => {
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, []);
+
     const handleInputChange = (e) => {
         const { name, value } = e.target;
         setForm({ ...form, [name]: value });
     };
 
-    const handleDeleteMember = (id) => {
-        setMembers(members.filter(member => member.id !== id));
-    };
 
     const handleReset = () => {
         setForm({
+            _id: "",
             firstName: '',
             lastName: '',
             phoneNumber: '',
@@ -35,7 +49,7 @@ const AddMembers = () => {
             last_name: form.lastName,
             phone: form.phoneNumber,
             joinDate: form.joinDate,
-            room_id:localStorage.getItem('room_id')
+            room_id: localStorage.getItem('room_id')
         };
         try {
             const response = await fetch('https://back-end-room-sharing.onrender.com/api/signup', {
@@ -52,7 +66,7 @@ const AddMembers = () => {
                 handleReset();
             } else {
                 console.log('Failed to add user');
-            }         
+            }
         } catch (error) {
             console.error('Error:', error);
         }
@@ -66,11 +80,11 @@ const AddMembers = () => {
         return `${day}/${month}/${year}`;
     };
     useEffect(() => {
-        const room_id="12345"
-        handleGetItems({ room_id });
+        const room_id = localStorage.getItem("room_id");
+        handleGetmember({ room_id });
     }, []);
 
-    const handleGetItems = async (room_idObj) => {
+    const handleGetmember = async (room_idObj) => {
         try {
             const response = await fetch('http://localhost:666/api/getmemberslist', {
                 method: 'post',
@@ -81,7 +95,7 @@ const AddMembers = () => {
             });
 
             if (response.ok) {
-                const data = await response.json();              
+                const data = await response.json();
                 setMembers(data.items);
                 console.log(data.items)
             } else {
@@ -99,26 +113,27 @@ const AddMembers = () => {
     const editPopup = async (phone) => {
         const newShowPopup = !showPopup;
         setShowPopup(newShowPopup);
-        if (phone) { 
+        if (phone) {
             try {
                 const response = await fetch('http://localhost:666/api/getmembersdetails', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
                     },
-                    body: JSON.stringify({ phone: phone }) 
+                    body: JSON.stringify({ phone: phone })
                 });
                 if (response.ok) {
                     const data = await response.json();
                     setForm({
+                        _id: data.items._id,
                         firstName: data.items.first_name,
                         lastName: data.items.last_name,
                         phoneNumber: data.items.phone,
                         joinDate: data.items.joinDate,
-                        room_id:data.items.room_id
+                        room_id: data.items.room_id
                     });
                 }
-                 else {
+                else {
                     console.log('Failed to fetch items');
                 }
             } catch (error) {
@@ -126,7 +141,65 @@ const AddMembers = () => {
             }
         }
     };
-    
+    const handleDeleteMember = async (phone) => {
+        try {
+            const response = await fetch('http://localhost:666/api/deletemember', {
+                method: 'post',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ phone }),
+            });
+            if (response) {
+                handleGetmember({ room_id });
+
+            }
+        } catch (error) {
+            console.error('Error:', error);
+        }
+
+    };
+    const handleupdateItem = async (id) => {
+        const updateData = {
+            _id:form._id,
+            first_name: form.firstName,
+            last_name: form.lastName,
+            phone: form.phoneNumber,
+            joinDate: form.joinDate,
+            room_id: localStorage.getItem('room_id')
+        };
+
+        try {
+            const response = await fetch('http://localhost:666/api/updatemember', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(updateData),
+            });
+
+            if (response.ok) {
+                handleGetmember({ room_id });
+
+                setShowPopup(!showPopup);
+                handleReset();
+                const data = await response.json();
+                setForm({
+                    _id: data.items._id,
+                    firstName: data.items.first_name,
+                    lastName: data.items.last_name,
+                    phoneNumber: data.items.phone,
+                    joinDate: data.items.joinDate,
+                    room_id: data.items.room_id
+                });
+            } else {
+                console.log('Failed to update item');
+            }
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    };
+
 
     return (
         <div className="add-members">
@@ -153,10 +226,10 @@ const AddMembers = () => {
                             <td>{member.phone}</td>
                             <td>{formatDate(member.joinDate)}</td>
                             <td>
-                                <button onClick={() =>editPopup(member.phone)}>✏️</button>
+                                <button onClick={() => editPopup(member.phone)}>✏️</button>
                             </td>
                             <td>
-                                <button onClick={() => handleDeleteMember(member.id)}>🗑️</button>
+                                <button onClick={() => handleDeleteMember(member.phone)} >🗑️</button>
                             </td>
                         </tr>
                     ))}
@@ -166,57 +239,57 @@ const AddMembers = () => {
             {showPopup && (
                 <div className="popup">
                     <div className="popup-content">
-                    <div class="input-field">
-                        <span className="close-icon" onClick={togglePopup}>&times;</span>
-                        <h2>Add New Member</h2>
-                        <form>
-                            <label>
-                                First Name:
-                                <input
-                                    type="text"
-                                    name="firstName"
-                                    value={form.firstName}
-                                    onChange={handleInputChange}
-                                    className="input-field"
-                                />
-                            </label>
-                            <label>
-                                Last Name:
-                                <input
-                                    type="text"
-                                    name="lastName"
-                                    value={form.lastName}
-                                    onChange={handleInputChange}
-                                    className="input-field"
-                                />
-                            </label>
-                            <label>
-                                Phone Number:
-                                <input
-                                    type="text"
-                                    name="phoneNumber"
-                                    value={form.phoneNumber}
-                                    onChange={handleInputChange}
-                                    className="input-field"
-                                />
-                            </label>
-                            <label>
-                                Join Date:
-                                <input
-                                    type="date"
-                                    name="joinDate"
-                                    value={form.joinDate}
-                                    onChange={handleInputChange}
-                                    className="input-field"
-                                />
-                            </label>
-                            
-                            <div className="popup-buttons">
-                                <button type="button" onClick={handleReset}>Reset</button>
-                                <button type="button" onClick={handleAddMember}>Submit</button>
-                            </div>
-                        </form>
-                    </div>
+                        <div class="input-field">
+                            <span className="close-icon" onClick={togglePopup}>&times;</span>
+                            <h2>Add New Member</h2>
+                            <form>
+                                <label>
+                                    First Name:
+                                    <input
+                                        type="text"
+                                        name="firstName"
+                                        value={form.firstName}
+                                        onChange={handleInputChange}
+                                        className="input-field"
+                                    />
+                                </label>
+                                <label>
+                                    Last Name:
+                                    <input
+                                        type="text"
+                                        name="lastName"
+                                        value={form.lastName}
+                                        onChange={handleInputChange}
+                                        className="input-field"
+                                    />
+                                </label>
+                                <label>
+                                    Phone Number:
+                                    <input
+                                        type="text"
+                                        name="phoneNumber"
+                                        value={form.phoneNumber}
+                                        onChange={handleInputChange}
+                                        className="input-field"
+                                    />
+                                </label>
+                                <label>
+                                    Join Date:
+                                    <input
+                                        type="date"
+                                        name="joinDate"
+                                        value={form.joinDate}
+                                        onChange={handleInputChange}
+                                        className="input-field"
+                                    />
+                                </label>
+
+                                <div className="popup-buttons">
+                                    <button type="button" onClick={handleReset}>Reset</button>
+                                    <button type="button" onClick={() => form._id ? handleupdateItem(form._id) : handleAddMember}>{form._id ? "update" : "submit"}</button>
+                                </div>
+                            </form>
+                        </div>
                     </div>
                 </div>
             )}

@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
+import Shimmer from './Shimmer'; // Import the Shimmer component
 import './Header1.css';
 
 const Header = () => {
@@ -8,6 +9,14 @@ const Header = () => {
     const [editProfileOpen, setEditProfileOpen] = useState(false);
     const [profileImage, setProfileImage] = useState(null);
     const profileMenuRef = useRef(null);
+    const [roomId, setRoomId] = useState('');
+    const [loading, setLoading] = useState(true); // State to track loading
+
+    useEffect(() => {
+        const id = localStorage.getItem('room_id');
+        setRoomId(id);
+        setLoading(false); // Set loading to false after data is fetched
+    }, []);
 
     const toggleMenu = () => {
         setShowMenu(!showMenu);
@@ -49,20 +58,26 @@ const Header = () => {
         setEditProfileOpen(false);
     };
 
-    const offProfile= () =>{
+    const offProfile = () => {
         window.location.href = '/login';
+    };
+
+    if (loading) {
+        return <Shimmer />; // Show shimmer effect while loading
     }
 
     return (
         <div className="header">
             <div className="menu-icon" onClick={toggleMenu}>&#9776;</div>
             <h1>Room Sharing</h1>
-            <h3>Room_id :: {localStorage.getItem("room_id")}</h3>
+            <div className="headerroom">
+                <h3>Room_id :: {roomId}</h3>
+            </div>
             <div className="profile-icon" onClick={toggleProfileMenu}>
                 {profileImage ? (
                     <img src={profileImage} alt="Profile" className="profile-image" />
                 ) : (
-                    <span>&#128100;</span>
+                    <span>🤵</span>
                 )}
             </div>
             {showMenu && (
@@ -75,30 +90,8 @@ const Header = () => {
                     </ul>
                 </div>
             )}
-
             {profileMenuOpen && (
                 <div className="profile-menu" ref={profileMenuRef}>
-                    <div className="profile-upload">
-                        <label htmlFor="profile-upload-input" className="upload-label">
-                            {profileImage ? (
-                                <img src={profileImage} alt="Profile" className="profile-image" />
-                            ) : (
-                                <div >
-                                    <img
-
-                                        alt="📤 Upload Image"
-                                    />
-                                </div>
-                            )}
-                        </label>
-                        <input
-                            id="profile-upload-input"
-                            type="file"
-                            accept="image/*"
-                            onChange={handleImageUpload}
-                            style={{ display: 'none' }}
-                        />
-                    </div>
                     <button className="edit-profile" onClick={openEditProfile}>🙎🏻‍♂️ Edit Profile</button>
                     <button className="logout" onClick={offProfile}>Log Out</button>
                 </div>
@@ -108,6 +101,27 @@ const Header = () => {
                     <div className="edit-profile-content">
                         <button className="close-btn" onClick={closeEditProfile}>&times;</button>
                         <h2>Edit Profile</h2>
+                        <div className="profile-upload">
+                            <label htmlFor="profile-upload-input" className="upload-label">
+                                {profileImage ? (
+                                    <img src={profileImage} alt="Profile" className="profile-image" />
+                                ) : (
+                                    <div className="upload-placeholder">
+                                        <span role="img" aria-label="Upload Icon">Upload Image</span>
+                                    </div>
+                                )}
+                                <div className="upload-icon">
+                                    <span role="img" aria-label="Upload Icon">📤</span>
+                                </div>
+                            </label>
+                            <input
+                                id="profile-upload-input"
+                                type="file"
+                                accept="image/*"
+                                onChange={handleImageUpload}
+                                style={{ display: 'none' }}
+                            />
+                        </div>
                         <form>
                             <div className="form-group">
                                 <label>First Name</label>

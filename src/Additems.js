@@ -1,17 +1,19 @@
-import React, { useEffect, useState,useRef } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import './Additems.css';
 
 const AddItems = () => {
+    const room_id = localStorage.getItem("room_id");
     const [showPopup, setShowPopup] = useState(false);
     const [items, setItems] = useState([]);
     const [form, setForm] = useState({
+        _id: '',
         category: 'Select a Type',
         sub_category: '',
         quantity: '',
         price: '',
         date_of_purchase: new Date().toISOString().split('T')[0],
     });
-localStorage.setItem("purchaseby","sai")
+    
     const handleInputChange = (e) => {
         const { name, value } = e.target;
         setForm({ ...form, [name]: value });
@@ -22,7 +24,7 @@ localStorage.setItem("purchaseby","sai")
             setShowPopup(showPopup);
         }
     };
-    
+
     useEffect(() => {
         document.addEventListener('mousedown', handleClickOutside);
         return () => {
@@ -32,7 +34,7 @@ localStorage.setItem("purchaseby","sai")
     const formatDate = (dateString) => {
         const date = new Date(dateString);
         const day = String(date.getDate()).padStart(2, '0');
-        const month = String(date.getMonth() + 1).padStart(2, '0'); 
+        const month = String(date.getMonth() + 1).padStart(2, '0');
         const year = date.getFullYear();
         return `${day}/${month}/${year}`;
     };
@@ -44,8 +46,8 @@ localStorage.setItem("purchaseby","sai")
             quantity: form.quantity,
             price: form.price,
             date_of_purchase: form.date_of_purchase,
-            room_id:localStorage.getItem('room_id'),
-            purchaseby:localStorage.getItem("purchaseby")
+            room_id: localStorage.getItem('room_id'),
+            purchaseby: localStorage.getItem("Loginname")
         };
         try {
             const response = await fetch('http://localhost:666/api/additems', {
@@ -56,9 +58,10 @@ localStorage.setItem("purchaseby","sai")
                 body: JSON.stringify(userData),
             });
             if (response.ok) {
-                console.log('User added successfully');
-                setItems([...items, { ...form, id: items.length + 1 }]);
+                handleGetItems({ room_id });
+                setItems([...items, { ...form }]);
                 setShowPopup(false);
+
                 handleReset();
             } else {
                 console.log('Failed to add user');
@@ -68,12 +71,50 @@ localStorage.setItem("purchaseby","sai")
         }
     };
 
+    const handleupdateItem = async (id) => {
+        const updateData = {
+            _id: id,
+            category: form.category,
+            sub_category: form.sub_category,
+            quantity: form.quantity,
+            price: form.price,
+            date_of_purchase: form.date_of_purchase,
+            room_id: localStorage.getItem('room_id'),
+            purchaseby: localStorage.getItem("Loginname")
+        };
+
+        try {
+            const response = await fetch('http://localhost:666/api/updateitems', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(updateData),
+            });
+
+            if (response.ok) {
+                handleGetItems({ room_id });
+                const updatedItem = await response.json();
+                console.log(updatedItem.data._id)
+                setItems([...items, { ...form, _id: updatedItem.data._id }]);
+                setShowPopup(false);
+                handleReset();
+            } else {
+                console.log('Failed to update item');
+            }
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    };
+
+
     useEffect(() => {
-        const room_id=localStorage.getItem('room_id')
-        handleGetItems(room_id);
+        const room_id = localStorage.getItem('room_id')
+        handleGetItems({ room_id });
     }, []);
 
     const handleGetItems = async (room_idObj) => {
+        console.log(room_idObj)
         try {
             const response = await fetch('http://localhost:666/api/getitems', {
                 method: 'post',
@@ -81,7 +122,7 @@ localStorage.setItem("purchaseby","sai")
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify(room_idObj),
-                
+
             });
 
             if (response.ok) {
@@ -95,15 +136,32 @@ localStorage.setItem("purchaseby","sai")
         }
     };
 
-    const handleDeleteItem = (id) => {
-        setItems(items.filter(item => item.id !== id));
+    const handleDeleteItem = async (_id) => {
+        console.log(_id)
+        try {
+            const response = await fetch('http://localhost:666/api/deleteItem', {
+                method: 'post',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ _id }),
+
+            });
+            if (response) {
+                handleGetItems({ room_id });
+            }
+        } catch {
+
+        }
+
     };
 
     const handleReset = () => {
         setForm({
+            _id: "",
             category: 'Select a Type',
             itemType: '',
-            subCategory: '',
+            sub_category: '',
             quantity: '',
             price: '',
             date: new Date().toISOString().split('T')[0],
@@ -116,29 +174,29 @@ localStorage.setItem("purchaseby","sai")
     const editPopup = async (_id) => {
         const newShowPopup = !showPopup;
         setShowPopup(newShowPopup);
-        if (_id) { 
+        if (_id) {
             try {
                 const response = await fetch('http://localhost:666/api/getitemssdetails', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
                     },
-                    body: JSON.stringify({ _id: _id }) 
+                    body: JSON.stringify({ _id: _id })
                 });
-    
+
                 if (response.ok) {
                     const data = await response.json();
                     setForm({
-
+                        _id: data.items._id,
                         category: data.items.category,
                         sub_category: data.items.sub_category,
                         quantity: data.items.quantity,
                         price: data.items.price,
                         date_of_purchase: data.items.date_of_purchase,
-                       
+
                     });
                 }
-                 else {
+                else {
                     console.log('Failed to fetch items');
                 }
             } catch (error) {
@@ -175,12 +233,12 @@ localStorage.setItem("purchaseby","sai")
                             <td>{item.quantity}</td>
                             <td>{item.price}</td>
                             <td>{formatDate(item.date_of_purchase)}</td>
-                            <td>{localStorage.getItem("purchaseby")}</td>
+                            <td>{item.purchaseby}</td>
                             <td>
                                 <button className="edit-button" onClick={() => editPopup(item._id)}>✏️</button>
                             </td>
                             <td>
-                                <button className="delete-button" onClick={() => handleDeleteItem(item.id)}>🗑️</button>
+                                <button className="delete-button" onClick={() => handleDeleteItem(item._id)} >🗑️</button>
                             </td>
                         </tr>
                     ))}
@@ -191,7 +249,7 @@ localStorage.setItem("purchaseby","sai")
                 <div className="popup" >
                     <div className="popup-content" ref={profileMenuRef}>
                         <span className="close-icon" onClick={togglePopup}>&times;</span>
-                        <h2>Add New Item</h2>
+                        <h2>{form._id ? 'Edit item' : 'Add New Item'}</h2>
                         <form>
                             <label>
                                 Category:
@@ -213,10 +271,10 @@ localStorage.setItem("purchaseby","sai")
                                 Sub Category:
                                 <input
                                     type="text"
-                                    name="subCategory"
+                                    name="sub_category"
                                     value={form.sub_category}
                                     onChange={handleInputChange}
-                                    className="input-field subCategory"
+                                    className="input-field sub_category"
                                 />
                             </label>
                             <label>
@@ -243,7 +301,7 @@ localStorage.setItem("purchaseby","sai")
                                 Date of Purchase:
                                 <input
                                     type="date"
-                                    name="date"
+                                    name="date_of_purchase"
                                     value={form.date_of_purchase}
                                     onChange={handleInputChange}
                                     className="input-field date"
@@ -251,7 +309,11 @@ localStorage.setItem("purchaseby","sai")
                             </label>
                             <div className="popup-buttons">
                                 <button type="button" onClick={handleReset}>Reset</button>
-                                <button type="button" onClick={handleAddItem}>Submit</button>
+                                <button
+                                    type="button"
+                                    onClick={() => form._id ? handleupdateItem(form._id) : handleAddItem()}>
+                                    {form._id ? 'Update' : 'Submit'}
+                                </button>
                             </div>
                         </form>
                     </div>

@@ -23,7 +23,7 @@ const LoginPage = () => {
         };
 
         try {
-            const response = await fetch('https://back-end-room-sharing.onrender.com/api/signin', {
+            const response = await fetch('http://localhost:666/api/signin', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -35,7 +35,8 @@ const LoginPage = () => {
 
             if (response.ok && result.status) {
                 console.log('Login successful:', result);
-                localStorage.setItem("room_id","12345")
+                localStorage.setItem("room_id",result?.user.room_id )
+                localStorage.setItem("Loginname",result?.user.first_name )
                 window.location.href = '/';
             } else {
                 setErrorMessage(result.msg || 'Login failed');
@@ -51,7 +52,7 @@ const LoginPage = () => {
     return (
         <div className="login-container">
             <div className="logo">
-                <img src="https://www.example.com/logo.png" alt="Logo" />
+                <img src="https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.freepik.com%2Fpremium-ai-image%2Finclusive-group-people-ai-generated_61009544.htm&psig=AOvVaw3kuOvR0WKtLvp0xzidtpHJ&ust=1720872456727000&source=images&cd=vfe&opi=89978449&ved=0CBEQjRxqFwoTCMDJ1s67oYcDFQAAAAAdAAAAABAEhttps://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.freepik.com%2Fpremium-ai-image%2Finclusive-group-people-ai-generated_61009544.htm&psig=AOvVaw3kuOvR0WKtLvp0xzidtpHJ&ust=1720872456727000&source=images&cd=vfe&opi=89978449&ved=0CBEQjRxqFwoTCMDJ1s67oYcDFQAAAAAdAAAAABAE" alt="Logo" />
             </div>
             <form className="login-form" onSubmit={handleSubmit}>
                 
