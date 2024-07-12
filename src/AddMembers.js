@@ -60,8 +60,7 @@ const AddMembers = () => {
                 body: JSON.stringify(userData),
             });
             if (response.ok) {
-                console.log('User added successfully');
-                setMembers([...members, { ...form, id: members.length + 1 }]);
+                handleGetmember({room_id});
                 setShowPopup(false);
                 handleReset();
             } else {
@@ -286,7 +285,7 @@ const AddMembers = () => {
 
                                 <div className="popup-buttons">
                                     <button type="button" onClick={handleReset}>Reset</button>
-                                    <button type="button" onClick={() => form._id ? handleupdateItem(form._id) : handleAddMember}>{form._id ? "update" : "submit"}</button>
+                                    <button type="button" onClick={() => form._id ? handleupdateItem(form._id) : handleAddMember()}>{form._id ? "update" : "submit"}</button>
                                 </div>
                             </form>
                         </div>
