@@ -50,7 +50,7 @@ const AddItems = () => {
             purchaseby: localStorage.getItem("Loginname")
         };
         try {
-            const response = await fetch('http://localhost:666/api/additems', {
+            const response = await fetch('https://back-end-room-sharing.onrender.com/api/additems', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -84,7 +84,7 @@ const AddItems = () => {
         };
 
         try {
-            const response = await fetch('http://localhost:666/api/updateitems', {
+            const response = await fetch('https://back-end-room-sharing.onrender.com/api/updateitems', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -116,7 +116,7 @@ const AddItems = () => {
     const handleGetItems = async (room_idObj) => {
         console.log(room_idObj)
         try {
-            const response = await fetch('http://localhost:666/api/getitems', {
+            const response = await fetch('https://back-end-room-sharing.onrender.com/api/getitems', {
                 method: 'post',
                 headers: {
                     'Content-Type': 'application/json',
@@ -139,7 +139,7 @@ const AddItems = () => {
     const handleDeleteItem = async (_id) => {
         console.log(_id)
         try {
-            const response = await fetch('http://localhost:666/api/deleteItem', {
+            const response = await fetch('https://back-end-room-sharing.onrender.com/api/deleteItem', {
                 method: 'post',
                 headers: {
                     'Content-Type': 'application/json',
@@ -176,7 +176,7 @@ const AddItems = () => {
         setShowPopup(newShowPopup);
         if (_id) {
             try {
-                const response = await fetch('http://localhost:666/api/getitemssdetails', {
+                const response = await fetch('https://back-end-room-sharing.onrender.com/api/getitemssdetails', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',

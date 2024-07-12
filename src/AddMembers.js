@@ -86,7 +86,7 @@ const AddMembers = () => {
 
     const handleGetmember = async (room_idObj) => {
         try {
-            const response = await fetch('http://localhost:666/api/getmemberslist', {
+            const response = await fetch('https://back-end-room-sharing.onrender.com/api/getmemberslist', {
                 method: 'post',
                 headers: {
                     'Content-Type': 'application/json',
@@ -115,7 +115,7 @@ const AddMembers = () => {
         setShowPopup(newShowPopup);
         if (phone) {
             try {
-                const response = await fetch('http://localhost:666/api/getmembersdetails', {
+                const response = await fetch('https://back-end-room-sharing.onrender.com/api/getmembersdetails', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -143,7 +143,7 @@ const AddMembers = () => {
     };
     const handleDeleteMember = async (phone) => {
         try {
-            const response = await fetch('http://localhost:666/api/deletemember', {
+            const response = await fetch('https://back-end-room-sharing.onrender.com/api/deletemember', {
                 method: 'post',
                 headers: {
                     'Content-Type': 'application/json',
@@ -170,7 +170,7 @@ const AddMembers = () => {
         };
 
         try {
-            const response = await fetch('http://localhost:666/api/updatemember', {
+            const response = await fetch('https://back-end-room-sharing.onrender.com/api/updatemember', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
