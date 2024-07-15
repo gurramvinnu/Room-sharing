@@ -4,6 +4,7 @@ import ShimmerRow from './ShimmerRow1';
 
 const AddItems = () => {
     const room_id = localStorage.getItem("room_id");
+    const login_id= localStorage.getItem("login_id");
     const [showPopup, setShowPopup] = useState(false);
     const [items, setItems] = useState([]);
     const [loading, setLoading] = useState(true); // Added loading state
@@ -56,6 +57,7 @@ const AddItems = () => {
             date_of_purchase: form.date_of_purchase,
             room_id: localStorage.getItem('room_id'),
             purchaseby: localStorage.getItem("Loginname"),
+            purchaseby_id:localStorage.getItem("login_id")
         };
 
         try {
@@ -89,8 +91,8 @@ const AddItems = () => {
             date_of_purchase: form.date_of_purchase,
             room_id: localStorage.getItem('room_id'),
             purchaseby: localStorage.getItem("Loginname"),
-        };
-
+            purchaseby_id:localStorage.getItem("login_id")
+        }
         try {
             const response = await fetch('https://back-end-room-sharing.onrender.com/api/updateitems', {
                 method: 'POST',
@@ -240,18 +242,18 @@ const AddItems = () => {
                                 <td>{item.price}</td>
                                 <td>{formatDate(item.date_of_purchase)}</td>
                                 <td>{item.purchaseby}</td>
+                                
                                 <td>
-                                    <button className="edit-button" onClick={() => editPopup(item._id)}>✏️</button>
+                                    <button className="edit-button" onClick={() => editPopup(item._id)}>{(item.purchaseby_id==login_id) ?"✏️":"-"}</button>
                                 </td>
                                 <td>
-                                    <button className="delete-button" onClick={() => handleDeleteItem(item._id)}>🗑️</button>
+                                    <button className="delete-button" onClick={() => handleDeleteItem(item._id)}>{(item.purchaseby_id ==login_id) ?"🗑️ ":"-"}</button>
                                 </td>
                             </tr>
                         ))
                     )}
                 </tbody>
             </table>
-
             {showPopup && (
                 <div className="popup">
                     <div className="popup-content" ref={profileMenuRef}>

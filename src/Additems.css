@@ -54,7 +54,7 @@ th {
 }
 
 .popup {
-    position: fixed;
+    position: fixed; /* Ensures it covers the viewport */
     top: 0;
     left: 0;
     width: 100%;
@@ -63,15 +63,24 @@ th {
     display: flex;
     align-items: center;
     justify-content: center;
+    z-index: 1000; /* Ensures it is on top */
 }
 
-.popup-content {
-    background: #fff;
-    padding: 20px;
-    border-radius: 8px;
-    position: relative;
+popup-content {
+    background-color: white;
+    padding: 100px;
+    border-radius: 20px;
     width: 400px;
+    box-shadow: 0 5px 100px rgba(126, 64, 64, 0.1);
+    position: relative;
 }
+form {
+    display: flex;
+    flex-direction: column;
+    width: 100%; /* Ensures the form takes full width of the popup content */
+    height: 100%; /* Ensures the form takes full height of the popup content */
+}
+
 
 .close-icon {
     position: absolute;
@@ -85,10 +94,6 @@ h2 {
     margin-top: 0;
 }
 
-form {
-    display: flex;
-    flex-direction: column;
-}
 
 label {
     margin-bottom: 10px;

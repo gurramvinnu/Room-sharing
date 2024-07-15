@@ -37,7 +37,8 @@ const LoginPage = () => {
                 console.log('Login successful:', result);
                 localStorage.setItem("room_id",result?.user.room_id )
                 localStorage.setItem("Loginname",result?.user.first_name )
-                localStorage.setItem("phone",result?.user.phone)
+                localStorage.setItem("phone",result?.user.phone);
+                localStorage.setItem("login_id",result?.user._id)
                 window.location.href = '/';
             } else {
                 setErrorMessage(result.msg || 'Login failed');
@@ -52,11 +53,11 @@ const LoginPage = () => {
 
     return (
         <div className="login-container">
+           
+            <form className="login-form" onSubmit={handleSubmit}>
             <div className="logo">
                 <img src="https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.freepik.com%2Fpremium-ai-image%2Finclusive-group-people-ai-generated_61009544.htm&psig=AOvVaw3kuOvR0WKtLvp0xzidtpHJ&ust=1720872456727000&source=images&cd=vfe&opi=89978449&ved=0CBEQjRxqFwoTCMDJ1s67oYcDFQAAAAAdAAAAABAEhttps://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.freepik.com%2Fpremium-ai-image%2Finclusive-group-people-ai-generated_61009544.htm&psig=AOvVaw3kuOvR0WKtLvp0xzidtpHJ&ust=1720872456727000&source=images&cd=vfe&opi=89978449&ved=0CBEQjRxqFwoTCMDJ1s67oYcDFQAAAAAdAAAAABAE" alt="Logo" />
             </div>
-            <form className="login-form" onSubmit={handleSubmit}>
-                
                 <div className="input-container">
                     <label htmlFor="phone">Phone</label>
                     <input
@@ -91,10 +92,11 @@ const LoginPage = () => {
                 <button type="submit" className="login-button">
                     {isLoading ? 'Logging in...' : 'Login'}
                 </button>
-            </form>
-            <div className="new-user">
+                <div className="new-user">
                 <a href="/SignupPage">New User? Sign Up</a>
             </div>
+            </form>
+           
         </div>
     );
 };

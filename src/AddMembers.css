@@ -100,6 +100,13 @@ button:hover {
 }
 
 
+form {
+    display: flex;
+    flex-direction: column;
+    width: 88%;
+    height: 100%;
+}
+
 .popup-buttons {
     display: flex;
     justify-content: space-between;
