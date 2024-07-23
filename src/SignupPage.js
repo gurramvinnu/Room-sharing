@@ -14,12 +14,12 @@ const SignupPage = () => {
     const [firstNameError, setFirstNameError] = useState('');
     const [lastNameError, setLastNameError] = useState('');
     const [phoneError, setPhoneError] = useState('');
-    const [emailError, setEmailError] = useState('');
+    // const [emailError, setEmailError] = useState('');
     const [roomIdError, setRoomIdError] = useState('');
     const [passwordError, setPasswordError] = useState('');
     const [confirmPasswordError, setConfirmPasswordError] = useState('');
-    const [generalErrorMessage, setGeneralErrorMessage] = useState('');
-    const [successMessage, setSuccessMessage] = useState('');
+    // const [generalErrorMessage, setGeneralErrorMessage] = useState('');
+    // const [successMessage, setSuccessMessage] = useState('');
     const [passwordVisible, setPasswordVisible] = useState(false);
     const handlePasswordChange = (e) => {
         const value = e.target.value;
@@ -36,7 +36,7 @@ const SignupPage = () => {
         setFirstNameError('');
         setLastNameError('');
         setPhoneError('');
-        setEmailError('');
+        // setEmailError('');
         setRoomIdError('');
         setPasswordError('');
         setConfirmPasswordError('');
@@ -81,8 +81,8 @@ const SignupPage = () => {
     };
     const handleSubmit = async (e) => {
         e.preventDefault();
-        setGeneralErrorMessage('');
-        setSuccessMessage('');
+        // setGeneralErrorMessage('');
+        // setSuccessMessage('');
 
         if (!validateFields()) {
             return;
@@ -116,7 +116,7 @@ const SignupPage = () => {
             
         } catch (error) {
             console.error('Error:', error);
-            setGeneralErrorMessage('An error occurred. Please try again.');
+            // setGeneralErrorMessage('An error occurred. Please try again.');
         }
 
     };

@@ -244,10 +244,10 @@ const AddItems = () => {
                                 <td>{item.purchaseby}</td>
                                 
                                 <td>
-                                    <button className="edit-button" onClick={() => editPopup(item._id)}>{(item.purchaseby_id==login_id) ?"✏️":"-"}</button>
+                                    <button className="edit-button" onClick={() => editPopup(item._id)}>{(item.purchaseby_id===login_id) ?"✏️":"-"}</button>
                                 </td>
                                 <td>
-                                    <button className="delete-button" onClick={() => handleDeleteItem(item._id)}>{(item.purchaseby_id ==login_id) ?"🗑️ ":"-"}</button>
+                                    <button className="delete-button" onClick={() => handleDeleteItem(item._id)}>{(item.purchaseby_id ===login_id) ?"🗑️ ":"-"}</button>
                                 </td>
                             </tr>
                         ))

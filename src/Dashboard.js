@@ -22,15 +22,15 @@ const Dashboard = () => {
     const [yourShare, setYourShare] = useState(0);
     const [pieData, setPieData] = useState([]);
     const [labels, setLabels] = useState([]);
-    const login_id = localStorage.getItem('login_id');
-    const room_id = localStorage.getItem('room_id')
+    const loginid = localStorage.getItem('login_id');
+    const roomid = localStorage.getItem('room_id')
 
 
     useEffect(() => {
         const fetchData = async () => {
             setLoading(true);
             try {
-                const room_id = room_id;
+                const room_id = roomid;
                 const response1 = await fetch('https://back-end-room-sharing.onrender.com/api/Roomexpansions', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
@@ -40,7 +40,7 @@ const Dashboard = () => {
                 setTotalMonthsExpansion(data1.totalSum);
 
 
-                const purchaseby_id = login_id
+                const purchaseby_id = loginid
                 const response2 = await fetch('https://back-end-room-sharing.onrender.com/api/yourexpansions', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },

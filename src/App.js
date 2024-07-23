@@ -1,20 +1,20 @@
-import React, { useEffect,useState } from 'react';
+import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import LoginPage from './loginpage';
 import MainApp from './MainApp';
 import SignupPage from './SignupPage';
 
 const App = () => {
-   const [roomId, setRoomId] = useState('');
+//    const [roomId, setRoomId] = useState('');
 
-    useEffect(() => {
-        const room_id = localStorage.getItem('room_id'); 
-        setRoomId(room_id); 
-    }, []);
+//     useEffect(() => {
+//         const room_id = localStorage.getItem('room_id'); 
+//         setRoomId(room_id); 
+//     }, []);
     
-    useEffect(() => {
-        // window.location.href = '/login'; 
-    }, [roomId===null]);
+    // useEffect(() => {
+    //     // window.location.href = '/login'; 
+    // }, [roomId==null]);
    
     return (
         <Router>
