@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
-import './AddItems.css';
+import './Additems.css';
 import ShimmerRow from './ShimmerRow1';
 
 const AddItems = () => {
