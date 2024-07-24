@@ -6,8 +6,10 @@ const AddItems = () => {
     const room_id = localStorage.getItem("room_id");
     const login_id = localStorage.getItem("login_id");
     const [showPopup, setShowPopup] = useState(false);
+    const [showDownloadPopup, setShowDownloadPopup] = useState(false); // State for download popup
     const [items, setItems] = useState([]);
-    const [loading, setLoading] = useState(true); // Added loading state
+    const [loading, setLoading] = useState(true);
+    const [isLoading, setIsLoading] = useState(false);
     const [form, setForm] = useState({
         _id: '',
         category: 'Select a Type',
@@ -16,12 +18,17 @@ const AddItems = () => {
         price: '',
         date_of_purchase: new Date().toISOString().split('T')[0],
     });
+    const [downloadMonth, setDownloadMonth] = useState('01'); // State for download month
 
     const profileMenuRef = useRef(null);
+    const downloadMenuRef = useRef(null); // Ref for download popup
 
     const handleClickOutside = (event) => {
         if (profileMenuRef.current && !profileMenuRef.current.contains(event.target)) {
             setShowPopup(false);
+        }
+        if (downloadMenuRef.current && !downloadMenuRef.current.contains(event.target)) {
+            setShowDownloadPopup(false);
         }
     };
 
@@ -119,7 +126,7 @@ const AddItems = () => {
     }, []);
 
     const handleGetItems = async (room_idObj) => {
-        setLoading(true); // Start loading
+        setLoading(true);
         try {
             const response = await fetch('https://back-end-room-sharing.onrender.com/api/getitems', {
                 method: 'POST',
@@ -132,14 +139,14 @@ const AddItems = () => {
             if (response.ok) {
                 const data = await response.json();
                 setItems(data.items);
-                setLoading(false); // End loading
+                setLoading(false);
             } else {
                 console.log('Failed to fetch items');
-                setLoading(false); // End loading even on error
+                setLoading(false);
             }
         } catch (error) {
             console.error('Error:', error);
-            setLoading(false); // End loading even on error
+            setLoading(false);
         }
     };
 
@@ -165,6 +172,7 @@ const AddItems = () => {
         setShowPopup(!showPopup);
     };
 
+    
     const editPopup = async (id) => {
         setShowPopup(true);
         if (id) {
@@ -199,16 +207,62 @@ const AddItems = () => {
     const formatDate = (dateString) => {
         const date = new Date(dateString);
         const day = String(date.getDate()).padStart(2, '0');
-        const month = String(date.getMonth() + 1).padStart(2, '0'); 
+        const month = String(date.getMonth() + 1).padStart(2, '0');
         const year = date.getFullYear();
         return `${day}/${month}/${year}`;
     };
 
+    const handleDownloadItems = async (event) => {
+        event.preventDefault(); // Prevent the default action
+    
+        const month = downloadMonth;
+        const room_id = localStorage.getItem("room_id");
+    
+        try {
+            const response = await fetch(`http://localhost:666/api/downloadtemplate`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ room_id, month, name: 'downloaditems' }),
+            });
+    
+            if (response.ok) {
+                const blob = await response.blob();
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `items_${month}.pdf`; // Change the extension to .pdf
+                document.body.appendChild(a);
+                a.click();
+                a.remove();
+                window.URL.revokeObjectURL(url);
+                setShowDownloadPopup(false);
+            } else {
+                console.error('Failed to download items');
+            }
+        } catch (error) {
+            console.error('Error fetching items:', error);
+        }
+    };
+    
+    
+    
+    const toggleDownloadPopup = () => {
+        setShowDownloadPopup(!showDownloadPopup);
+    };
+
+
     return (
         <div className="add-items">
-            <button className="add-item-button" onClick={togglePopup}>
-                <span>+</span> Add Items
-            </button>
+            <div className="button-container">
+                <button className="add-item-button" onClick={togglePopup}>
+                    <span>+</span> Add Items
+                </button>
+                <button className="download-item-button" onClick={toggleDownloadPopup}>
+                    <span>⬇</span> Download Items
+                </button>
+            </div>
 
             <table>
                 <thead>
@@ -246,7 +300,6 @@ const AddItems = () => {
                                 <td>{item.price}</td>
                                 <td>{formatDate(item.date_of_purchase)}</td>
                                 <td>{item.purchaseby}</td>
-                                
                                 <td>
                                     <button className="edit-button" onClick={() => editPopup(item._id)}>{(item.purchaseby_id === login_id) ? "✏️" : "-"}</button>
                                 </td>
@@ -258,6 +311,7 @@ const AddItems = () => {
                     )}
                 </tbody>
             </table>
+
             {showPopup && (
                 <div className="popup">
                     <div className="popup-content" ref={profileMenuRef}>
@@ -324,6 +378,44 @@ const AddItems = () => {
                                 <button type="button" onClick={() => form._id ? handleUpdateItem(form._id) : handleAddItem()}>
                                     {form._id ? 'Update' : 'Submit'}
                                 </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            )}
+
+            {showDownloadPopup && (
+                <div className="popup">
+                    <div className="popup-content" ref={downloadMenuRef}>
+                        <span className="close-icon" onClick={toggleDownloadPopup}>&times;</span>
+                        <h2>Download the Items</h2>
+                        <form>
+                            <label>
+                                Select Month:
+                                <select
+                                    name="month"
+                                    value={downloadMonth}
+                                    onChange={(e) => setDownloadMonth(e.target.value)}
+                                    className="input-field"
+                                >
+                                    <option value="01">January</option>
+                                    <option value="02">February</option>
+                                    <option value="03">March</option>
+                                    <option value="04">April</option>
+                                    <option value="05">May</option>
+                                    <option value="06">June</option>
+                                    <option value="07">July</option>
+                                    <option value="08">August</option>
+                                    <option value="09">September</option>
+                                    <option value="10">October</option>
+                                    <option value="11">November</option>
+                                    <option value="12">December</option>
+                                </select>
+                            </label>
+                            <div className="popup-buttons">
+                                <button type="button" onClick={toggleDownloadPopup}>Close</button>
+                                <button onClick={handleDownloadItems}  >Download PDF
+                    </button>
                             </div>
                         </form>
                     </div>

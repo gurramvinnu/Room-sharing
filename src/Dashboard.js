@@ -3,6 +3,7 @@ import { Pie } from 'react-chartjs-2';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 import './Dashboard.css';
 import ShimmerCard from './ShimmerCard';
+
 ChartJS.register(Tooltip, Legend, ArcElement);
 
 const getCurrentMonth = () => {
@@ -13,6 +14,7 @@ const getCurrentMonth = () => {
     const currentMonthIndex = new Date().getMonth();
     return monthNames[currentMonthIndex];
 };
+
 const monthNamesMap = {
     '01': 'January', '02': 'February', '03': 'March', '04': 'April',
     '05': 'May', '06': 'June', '07': 'July', '08': 'August',
@@ -31,10 +33,12 @@ const Dashboard = () => {
     const roomid = localStorage.getItem('room_id');
     const [monthLabel, setMonthLabel] = useState(monthNamesMap[selectedMonth]);
     const Loginname = localStorage.getItem('Loginname');
+    const [showPopup, setShowPopup] = useState(!roomid);
 
     useEffect(() => {
         setMonthLabel(monthNamesMap[selectedMonth]);
     }, [selectedMonth]);
+
     useEffect(() => {
         const fetchData = async () => {
             setLoading(true);
@@ -74,58 +78,42 @@ const Dashboard = () => {
             }
         };
 
-        fetchData();
-    }, [selectedMonth]);
+        if (roomid) {
+            fetchData();
+        }
+    }, [selectedMonth, roomid, loginid]);
 
     const handleMonthChange = (event) => {
         setSelectedMonth(event.target.value);
-
     };
+
     const noDataChart = {
         datasets: [{
-            data: [1], // Single data point to create a "No data" pie chart
-            backgroundColor: ['#D3D3D3'], // Light cement color
+            data: [1],
+            backgroundColor: ['#D3D3D3'],
             borderWidth: 1,
             borderColor: '#FFFFFF',
         }],
         labels: ['No data available'],
     };
 
-    const options = {
-        plugins: {
-            legend: {
-                display: false
-            },
-            tooltip: {
-                enabled: false
-            },
-        }
+    const closePopup = () => {
+        setShowPopup(false);
     };
 
     return (
         <div className="dashboard">
             <h1>Welcome {Loginname}</h1>
 
-            {/* Month-wise dropdown */}
             <select value={selectedMonth} onChange={handleMonthChange}>
-                <option value="01">January</option>
-                <option value="02">February</option>
-                <option value="03">March</option>
-                <option value="04">April</option>
-                <option value="05">May</option>
-                <option value="06">June</option>
-                <option value="07">July</option>
-                <option value="08">August</option>
-                <option value="09">September</option>
-                <option value="10">October</option>
-                <option value="11">November</option>
-                <option value="12">December</option>
+                {Object.entries(monthNamesMap).map(([key, value]) => (
+                    <option key={key} value={key}>{value}</option>
+                ))}
             </select>
 
             <div className="card-container">
                 {loading ? (
                     <>
-                        <ShimmerCard />
                         <ShimmerCard />
                         <ShimmerCard />
                         <ShimmerCard />
@@ -146,18 +134,16 @@ const Dashboard = () => {
                                 <p>₹{yourShare}</p>
                             </div>
                         </div>
-
                     </>
                 )}
             </div>
 
             <div className="pie-chart-container">
-            <h2 className="pie-chart-title">Member Spend Money</h2>
-            {loading ? (
-                <ShimmerCard />
-            ) : (
-                <Pie 
-                    data={pieData.length === 0 ? noDataChart : {
+                <h2 className="pie-chart-title">Member Spend Money</h2>
+                {loading ? (
+                    <ShimmerCard />
+                ) : (
+                    <Pie data={pieData.length === 0 ? noDataChart : {
                         datasets: [{
                             data: pieData,
                             backgroundColor: [
@@ -180,15 +166,25 @@ const Dashboard = () => {
                             borderColor: '#FFFFFF'
                         }],
                         labels: labels
-                    }} 
-                    options={options}
-                />
-            )}
-            {(pieData.length === 0 && !loading ) &&(
-                <div className="no-data-message">No data available</div>
+                    }} />
+                )}
+                {(pieData.length === 0 && !loading) && (
+                    <div className="no-data-message">No data available</div>
+                )}
+            </div>
+
+            {showPopup && (
+                <div className="popup">
+                    <div className="popup-content">
+                        <h2>Welcome to Room App</h2>
+                        <p>Login into your room</p>
+                        <button onClick={() => window.location.href = '/login'}>Login</button>
+                        <p>New user or create a room</p>
+                        <button className="signup-button" onClick={() => window.location.href = '/SignupPage'}>Sign Up / Register</button>
+                    </div>
+                </div>
             )}
         </div>
-</div>
     );
 };
 

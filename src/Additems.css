@@ -25,7 +25,29 @@
 .add-item-button span {
     font-size: 20px;
 }
+.download-item-button {
+    display: inline-block;
+    margin-bottom: 20px;
+    padding: 10px 20px;
+    font-size: 20px;
+    background-color: #110956;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    color: rgb(245, 237, 237);
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-size: 16px;
+    position: absolute;
+    right: 180px
+}
 
+.download-item-button span {
+    font-size: 20px;
+}
 table {
     width: 100%;
     border-collapse: collapse;

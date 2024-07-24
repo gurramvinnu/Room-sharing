@@ -82,6 +82,7 @@ const Header = () => {
     };
 
     const offProfile = () => {
+        localStorage.clear();
         window.location.href = '/login';
     };
 
