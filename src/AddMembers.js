@@ -232,7 +232,12 @@ const AddMembers = () => {
                             <ShimmerRow />
                             <ShimmerRow />
                         </>
-                    ) : (
+                    ): members.length === 0 ? (
+                        <tr>
+                            <td colSpan="9" style={{ textAlign: 'center' }}>No data available</td>
+                        </tr>
+                    )  
+                    : (
                         members.slice(0, 10).map((member, index) => (
                             <tr key={member.id}>
                                 <td>{index + 1}</td>

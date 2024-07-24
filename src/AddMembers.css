@@ -12,7 +12,7 @@
     font-size: 16px;
     position: absolute;
     right: 30px;
-    
+
 }
 
 table {
@@ -34,7 +34,7 @@ tbody td {
 }
 
 button {
-    
+
     background: none;
     border: none;
     cursor: pointer;
@@ -59,7 +59,7 @@ button:hover {
 
 .popup-content {
     background-color: white;
-    padding: 250px;
+    padding: 75px;
     border-radius: 20px;
     width: 350px;
     box-shadow: 0 5px 100px rgba(126, 64, 64, 0.1);
@@ -84,9 +84,12 @@ button:hover {
 }
 
 .popup-content form {
-    border: 2px solid #ccc; /* Add border to the form */
-    padding: 20px; /* Add padding inside the form */
-    border-radius: 16px; /* Optional: Add border-radius to the form */
+    border: 2px solid #ccc;
+    /* Add border to the form */
+    padding: 20px;
+    /* Add padding inside the form */
+    border-radius: 16px;
+    /* Optional: Add border-radius to the form */
 }
 
 .popup-content form .input-field {
@@ -96,7 +99,8 @@ button:hover {
     margin-bottom: 20px;
     border: 2px solid #ccc;
     border-radius: 50px;
-    font-size: 1.2em; /* Increase the text size */
+    font-size: 1.2em;
+    /* Increase the text size */
 }
 
 
@@ -129,6 +133,7 @@ form {
     background-color: #007bff;
     color: white;
 }
+
 .edit-profile-popup {
     display: flex;
     justify-content: center;
@@ -226,7 +231,8 @@ form {
     justify-content: space-between;
 }
 
-.reset-btn, .update-btn {
+.reset-btn,
+.update-btn {
     padding: 10px 20px;
     border: none;
     border-radius: 4px;

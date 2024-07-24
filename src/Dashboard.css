@@ -39,11 +39,7 @@ h1 {
     transform: scale(1.05);
 }
 
-.pie-chart-container {
-    margin-top: 40px;
-    width: 100%;
-    max-width: 600px;
-}
+
 
 .shimmer-wrapper {
     overflow: hidden;
@@ -63,4 +59,124 @@ h1 {
     100% {
         background-position: 468px 0;
     }
+}
+
+.pie-chart-container {
+    border: 2px solid #F5DEB3; /* Light biscuit color */
+    padding: 50px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+    margin-top: 20px;
+}
+
+.pie-chart-title {
+    text-align: center;
+    margin-bottom: 10px;
+    font-weight: bold;
+}
+.card-container {
+    display: flex;
+    justify-content: space-around;
+}
+
+.card {
+    flex: 1;
+    margin: 10px;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    transition: background-color 0.3s ease;
+}
+
+.card-1 {
+    background-color: #f8b195;
+}
+
+.card-2 {
+    background-color: #f67280;
+}
+
+.card-3 {
+    background-color: #c06c84;
+}
+
+.card h2, .card p {
+    margin: 0;
+    padding: 10px 0;
+}
+
+.card p {
+    font-size: 1.5em;
+    font-weight: bold;
+}
+
+.card:hover {
+    background-color: #f1c40f;
+}
+.card-container {
+    display: flex;
+    justify-content: space-around;
+}
+
+.card {
+    flex: 1;
+    margin: 10px;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    transition: background-color 0.3s ease;
+}
+
+.card-1 {
+    background-color: #f8b195;
+}
+
+.card-2 {
+    background-color: #f67280;
+}
+
+.card-3 {
+    background-color: #c06c84;
+}
+
+.card h2, .card p {
+    margin: 0;
+    padding: 10px 0;
+}
+
+.card p {
+    font-size: 1.5em;
+    font-weight: bold;
+}
+
+.card:hover {
+    background-color: #f1c40f;
+}
+
+.bold-text {
+    font-weight: bold;
+}
+
+.no-data-message {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 18px;
+    color: #555;
+}
+
+.pie-chart-container {
+    position: relative;
+    width: 100%;
+    max-width: 400px;
+    margin: 0 auto;
+}
+
+.pie-chart-title {
+    text-align: center;
+    margin-bottom: 20px;
 }

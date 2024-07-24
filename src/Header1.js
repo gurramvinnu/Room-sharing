@@ -48,14 +48,7 @@ const Header = () => {
         }
     };
 
-    const handleClickOutside = (event) => {
-        if (menuRef.current && !menuRef.current.contains(event.target)) {
-            setShowMenu(false);
-        }
-        if (profileMenuRef.current && !profileMenuRef.current.contains(event.target)) {
-            setProfileMenuOpen(false);
-        }
-    };
+    const editProfileRef = useRef(null);
 
     useEffect(() => {
         document.addEventListener('mousedown', handleClickOutside);
@@ -63,6 +56,21 @@ const Header = () => {
             document.removeEventListener('mousedown', handleClickOutside);
         };
     }, []);
+    
+    const handleClickOutside = (event) => {
+        if (menuRef.current && !menuRef.current.contains(event.target)) {
+            setShowMenu(false);
+        }
+        if (profileMenuRef.current && !profileMenuRef.current.contains(event.target)) {
+            setProfileMenuOpen(false);
+        }
+        if (editProfileRef.current && !editProfileRef.current.contains(event.target)) {
+            setEditProfileOpen(false);
+        }
+    };
+    
+
+    
 
     const openEditProfile = () => {
         editPopup(phone)
@@ -166,10 +174,12 @@ const Header = () => {
     return (
         <div className="header">
             <div className="menu-icon" onClick={toggleMenu}>&#9776;</div>
-            <h1>Room Sharing</h1>
-            <div className="headerroom">
-                <h3>Room_id :: {roomId}</h3>
-            </div>
+            <div className="title-container">
+        <h1>Room Sharing</h1>
+        <div className="headerroom">
+            <h3>Room_id: {roomId}</h3>
+        </div>
+    </div>
             <div className="profile-icon" onClick={toggleProfileMenu}>
                 {profileImage ? (
                     <img src={profileImage} alt="Profile" className="profile-image" />
@@ -193,8 +203,8 @@ const Header = () => {
                     <button className="logout" onClick={offProfile}>Log Out</button>
                 </div>
             )}
-            {editProfileOpen && (
-                <div className="edit-profile-popup">
+                 {editProfileOpen && (
+                <div className="edit-profile-popup" ref={editProfileRef}>
                     <div className="edit-profile-content">
                         <button className="close-btn" onClick={closeEditProfile}>&times;</button>
                         <h2>Edit Profile</h2>

@@ -4,7 +4,7 @@ import ShimmerRow from './ShimmerRow1';
 
 const AddItems = () => {
     const room_id = localStorage.getItem("room_id");
-    const login_id= localStorage.getItem("login_id");
+    const login_id = localStorage.getItem("login_id");
     const [showPopup, setShowPopup] = useState(false);
     const [items, setItems] = useState([]);
     const [loading, setLoading] = useState(true); // Added loading state
@@ -57,7 +57,7 @@ const AddItems = () => {
             date_of_purchase: form.date_of_purchase,
             room_id: localStorage.getItem('room_id'),
             purchaseby: localStorage.getItem("Loginname"),
-            purchaseby_id:localStorage.getItem("login_id")
+            purchaseby_id: localStorage.getItem("login_id")
         };
 
         try {
@@ -91,7 +91,7 @@ const AddItems = () => {
             date_of_purchase: form.date_of_purchase,
             room_id: localStorage.getItem('room_id'),
             purchaseby: localStorage.getItem("Loginname"),
-            purchaseby_id:localStorage.getItem("login_id")
+            purchaseby_id: localStorage.getItem("login_id")
         }
         try {
             const response = await fetch('https://back-end-room-sharing.onrender.com/api/updateitems', {
@@ -199,7 +199,7 @@ const AddItems = () => {
     const formatDate = (dateString) => {
         const date = new Date(dateString);
         const day = String(date.getDate()).padStart(2, '0');
-        const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are zero-based
+        const month = String(date.getMonth() + 1).padStart(2, '0'); 
         const year = date.getFullYear();
         return `${day}/${month}/${year}`;
     };
@@ -232,6 +232,10 @@ const AddItems = () => {
                             <ShimmerRow />
                             <ShimmerRow />
                         </>
+                    ) : items.length === 0 ? (
+                        <tr>
+                            <td colSpan="9" style={{ textAlign: 'center' }}>No data available</td>
+                        </tr>
                     ) : (
                         items.slice(0, 10).map((item, index) => (
                             <tr key={item.id}>
@@ -244,10 +248,10 @@ const AddItems = () => {
                                 <td>{item.purchaseby}</td>
                                 
                                 <td>
-                                    <button className="edit-button" onClick={() => editPopup(item._id)}>{(item.purchaseby_id===login_id) ?"✏️":"-"}</button>
+                                    <button className="edit-button" onClick={() => editPopup(item._id)}>{(item.purchaseby_id === login_id) ? "✏️" : "-"}</button>
                                 </td>
                                 <td>
-                                    <button className="delete-button" onClick={() => handleDeleteItem(item._id)}>{(item.purchaseby_id ===login_id) ?"🗑️ ":"-"}</button>
+                                    <button className="delete-button" onClick={() => handleDeleteItem(item._id)}>{(item.purchaseby_id === login_id) ? "🗑️" : "-"}</button>
                                 </td>
                             </tr>
                         ))
@@ -316,7 +320,7 @@ const AddItems = () => {
                                 />
                             </label>
                             <div className="popup-buttons">
-                                <button type="button" onClick={() => form._id ? togglePopup() : handleReset()}>{form._id?"Close":"Reset"}</button>
+                                <button type="button" onClick={() => form._id ? togglePopup() : handleReset()}>{form._id ? "Close" : "Reset"}</button>
                                 <button type="button" onClick={() => form._id ? handleUpdateItem(form._id) : handleAddItem()}>
                                     {form._id ? 'Update' : 'Submit'}
                                 </button>

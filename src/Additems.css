@@ -66,14 +66,19 @@ th {
     z-index: 1000; /* Ensures it is on top */
 }
 
-popup-content {
+.popup-content {
     background-color: white;
-    padding: 100px;
+    padding: 50px;
     border-radius: 20px;
-    width: 400px;
-    box-shadow: 0 5px 100px rgba(126, 64, 64, 0.1);
+    width: 400px; /* Fixed width */
+    height: auto; /* Auto height based on content */
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
     position: relative;
+    max-width: 80%; /* Max width of 80% of viewport */
+    max-height: 80%; /* Max height of 80% of viewport */
+    overflow-y: auto; /* Enable vertical scroll if content exceeds height */
 }
+
 form {
     display: flex;
     flex-direction: column;
