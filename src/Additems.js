@@ -215,10 +215,10 @@ const AddItems = () => {
 
     const handleDownloadItems = async (event) => {
         event.preventDefault();
-    
+
         const month = downloadMonth;
         const room_id = localStorage.getItem("room_id");
-    
+
         try {
             const response = await fetch(`https://back-end-room-sharing.onrender.com/api/downloadtemplate`, {
                 method: 'POST',
@@ -227,7 +227,7 @@ const AddItems = () => {
                 },
                 body: JSON.stringify({ room_id, month, name: 'downloaditems' }),
             });
-    
+
             if (response.ok) {
                 const blob = await response.blob();
                 const url = window.URL.createObjectURL(blob);
@@ -316,44 +316,44 @@ const AddItems = () => {
             </table>
 
             <div className="pagination">
-    <button
-        className={`prev ${currentPage === 1 ? 'disabled' : ''}`}
-        onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
-        disabled={currentPage === 1}
-    >
-        &lt;&lt;
-    </button>
-    <button
-        className={`prev ${currentPage === 1 ? 'disabled' : ''}`}
-        onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
-        disabled={currentPage === 1}
-    >
-        &lt;
-    </button>
-    {Array.from({ length: totalPages }, (_, index) => (
-        <button
-            key={index + 1}
-            className={`page-number ${currentPage === index + 1 ? 'active' : ''}`}
-            onClick={() => setCurrentPage(index + 1)}
-        >
-            {index + 1}
-        </button>
-    ))}
-    <button
-        className={`next ${currentPage === totalPages ? 'disabled' : ''}`}
-        onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
-        disabled={currentPage === totalPages}
-    >
-        &gt;
-    </button>
-    <button
-        className={`next ${currentPage === totalPages ? 'disabled' : ''}`}
-        onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
-        disabled={currentPage === totalPages}
-    >
-        &gt;&gt;
-    </button>
-</div>
+                <button
+                    className={`prev ${currentPage === 1 ? 'disabled' : ''}`}
+                    onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+                    disabled={currentPage === 1}
+                >
+                    &lt;&lt;
+                </button>
+                <button
+                    className={`prev ${currentPage === 1 ? 'disabled' : ''}`}
+                    onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+                    disabled={currentPage === 1}
+                >
+                    &lt;
+                </button>
+                {Array.from({ length: totalPages }, (_, index) => (
+                    <button
+                        key={index + 1}
+                        className={`page-number ${currentPage === index + 1 ? 'active' : ''}`}
+                        onClick={() => setCurrentPage(index + 1)}
+                    >
+                        {index + 1}
+                    </button>
+                ))}
+                <button
+                    className={`next ${currentPage === totalPages ? 'disabled' : ''}`}
+                    onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+                    disabled={currentPage === totalPages}
+                >
+                    &gt;
+                </button>
+                <button
+                    className={`next ${currentPage === totalPages ? 'disabled' : ''}`}
+                    onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+                    disabled={currentPage === totalPages}
+                >
+                    &gt;&gt;
+                </button>
+            </div>
 
 
             {showPopup && (
@@ -375,7 +375,16 @@ const AddItems = () => {
                                     <option value="vegetable">Vegetable</option>
                                     <option value="milk">Milk</option>
                                     <option value="water">Water</option>
+                                    <option value="fruits">Fruits</option>
+                                    <option value="grains">Grains</option>
+                                    <option value="snacks">Snacks</option>
+                                    <option value="cleaning_supplies">Cleaning Supplies</option>
+                                    <option value="personal_care">Personal Care</option>
+                                    <option value="beverages">Beverages</option>
+                                    <option value="frozen_foods">Frozen Foods</option>
+                                    <option value="household_items">Household Items</option>
                                 </select>
+
                             </label>
                             <label>
                                 Sub Category:
