@@ -375,6 +375,7 @@ const AddItems = () => {
                                     <option value="vegetable">Vegetable</option>
                                     <option value="milk">Milk</option>
                                     <option value="water">Water</option>
+                                    <option value="egg">egg</option>
                                     <option value="fruits">Fruits</option>
                                     <option value="grains">Grains</option>
                                     <option value="snacks">Snacks</option>
