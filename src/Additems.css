@@ -180,3 +180,59 @@ label {
     background-color: #007bff;
     color: #fff;
 }
+
+/* General styles for the pagination container */
+.pagination {
+    display: flex;
+    justify-content: flex-end; /* Aligns pagination to the right */
+    margin-top: 20px;
+    font-size: 14px;
+}
+
+/* Pagination button styles */
+.pagination button,
+.pagination span {
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 8px 12px;
+    margin: 0 2px;
+    background-color: #f9f9f9;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+/* Styles for active page number */
+.pagination .active {
+    background-color: #007bff;
+    color: #fff;
+    border-color: #007bff;
+}
+
+/* Styles for hover and disabled states */
+.pagination button:hover:not(.disabled),
+.pagination span:hover:not(.disabled) {
+    background-color: #e2e6ea;
+}
+
+.pagination button.disabled,
+.pagination span.disabled {
+    color: #aaa;
+    cursor: not-allowed;
+}
+
+/* Pagination buttons */
+.pagination button {
+    background-color: #fff;
+    border: 1px solid #ddd;
+}
+
+.pagination span {
+    background-color: #fff;
+    border: 1px solid #ddd;
+}
+
+/* Previous and Next buttons */
+.pagination .prev,
+.pagination .next {
+    font-weight: bold;
+}

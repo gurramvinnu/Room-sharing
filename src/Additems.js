@@ -2,14 +2,15 @@ import React, { useEffect, useState, useRef } from 'react';
 import './Additems.css';
 import ShimmerRow from './ShimmerRow1';
 
+const ITEMS_PER_PAGE = 10;
+
 const AddItems = () => {
     const room_id = localStorage.getItem("room_id");
     const login_id = localStorage.getItem("login_id");
     const [showPopup, setShowPopup] = useState(false);
-    const [showDownloadPopup, setShowDownloadPopup] = useState(false); // State for download popup
+    const [showDownloadPopup, setShowDownloadPopup] = useState(false);
     const [items, setItems] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [isLoading, setIsLoading] = useState(false);
     const [form, setForm] = useState({
         _id: '',
         category: 'Select a Type',
@@ -18,10 +19,11 @@ const AddItems = () => {
         price: '',
         date_of_purchase: new Date().toISOString().split('T')[0],
     });
-    const [downloadMonth, setDownloadMonth] = useState('01'); // State for download month
+    const [downloadMonth, setDownloadMonth] = useState('01');
+    const [currentPage, setCurrentPage] = useState(1);
 
     const profileMenuRef = useRef(null);
-    const downloadMenuRef = useRef(null); // Ref for download popup
+    const downloadMenuRef = useRef(null);
 
     const handleClickOutside = (event) => {
         if (profileMenuRef.current && !profileMenuRef.current.contains(event.target)) {
@@ -172,7 +174,6 @@ const AddItems = () => {
         setShowPopup(!showPopup);
     };
 
-    
     const editPopup = async (id) => {
         setShowPopup(true);
         if (id) {
@@ -213,7 +214,7 @@ const AddItems = () => {
     };
 
     const handleDownloadItems = async (event) => {
-        event.preventDefault(); // Prevent the default action
+        event.preventDefault();
     
         const month = downloadMonth;
         const room_id = localStorage.getItem("room_id");
@@ -232,7 +233,7 @@ const AddItems = () => {
                 const url = window.URL.createObjectURL(blob);
                 const a = document.createElement('a');
                 a.href = url;
-                a.download = `Room_sharing_${month}.pdf`; // Change the extension to .pdf
+                a.download = `Room_sharing_${month}.pdf`;
                 document.body.appendChild(a);
                 a.click();
                 a.remove();
@@ -245,13 +246,15 @@ const AddItems = () => {
             console.error('Error fetching items:', error);
         }
     };
-    
-    
-    
+
     const toggleDownloadPopup = () => {
         setShowDownloadPopup(!showDownloadPopup);
     };
 
+    // Calculate pagination variables
+    const totalPages = Math.ceil(items.length / ITEMS_PER_PAGE);
+    const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+    const currentItems = items.slice(startIndex, startIndex + ITEMS_PER_PAGE);
 
     return (
         <div className="add-items">
@@ -286,14 +289,14 @@ const AddItems = () => {
                             <ShimmerRow />
                             <ShimmerRow />
                         </>
-                    ) : items.length === 0 ? (
+                    ) : currentItems.length === 0 ? (
                         <tr>
                             <td colSpan="9" style={{ textAlign: 'center' }}>No data available</td>
                         </tr>
                     ) : (
-                        items.slice(0, 10).map((item, index) => (
+                        currentItems.map((item, index) => (
                             <tr key={item.id}>
-                                <td>{index + 1}</td>
+                                <td>{startIndex + index + 1}</td>
                                 <td>{item.category}</td>
                                 <td>{item.sub_category}</td>
                                 <td>{item.quantity}</td>
@@ -311,6 +314,47 @@ const AddItems = () => {
                     )}
                 </tbody>
             </table>
+
+            <div className="pagination">
+    <button
+        className={`prev ${currentPage === 1 ? 'disabled' : ''}`}
+        onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+        disabled={currentPage === 1}
+    >
+        &lt;&lt;
+    </button>
+    <button
+        className={`prev ${currentPage === 1 ? 'disabled' : ''}`}
+        onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+        disabled={currentPage === 1}
+    >
+        &lt;
+    </button>
+    {Array.from({ length: totalPages }, (_, index) => (
+        <button
+            key={index + 1}
+            className={`page-number ${currentPage === index + 1 ? 'active' : ''}`}
+            onClick={() => setCurrentPage(index + 1)}
+        >
+            {index + 1}
+        </button>
+    ))}
+    <button
+        className={`next ${currentPage === totalPages ? 'disabled' : ''}`}
+        onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+        disabled={currentPage === totalPages}
+    >
+        &gt;
+    </button>
+    <button
+        className={`next ${currentPage === totalPages ? 'disabled' : ''}`}
+        onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+        disabled={currentPage === totalPages}
+    >
+        &gt;&gt;
+    </button>
+</div>
+
 
             {showPopup && (
                 <div className="popup">
@@ -414,8 +458,7 @@ const AddItems = () => {
                             </label>
                             <div className="popup-buttons">
                                 <button type="button" onClick={toggleDownloadPopup}>Close</button>
-                                <button onClick={handleDownloadItems}  >Download PDF
-                    </button>
+                                <button onClick={handleDownloadItems}>Download PDF</button>
                             </div>
                         </form>
                     </div>
