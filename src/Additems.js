@@ -219,7 +219,7 @@ const AddItems = () => {
         const room_id = localStorage.getItem("room_id");
     
         try {
-            const response = await fetch(`http://localhost:666/api/downloadtemplate`, {
+            const response = await fetch(`https://back-end-room-sharing.onrender.com/api/downloadtemplate`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -232,7 +232,7 @@ const AddItems = () => {
                 const url = window.URL.createObjectURL(blob);
                 const a = document.createElement('a');
                 a.href = url;
-                a.download = `items_${month}.pdf`; // Change the extension to .pdf
+                a.download = `Room_sharing_${month}.pdf`; // Change the extension to .pdf
                 document.body.appendChild(a);
                 a.click();
                 a.remove();
