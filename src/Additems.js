@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import './Additems.css';
 import ShimmerRow from './ShimmerRow1';
 
-const ITEMS_PER_PAGE = 10;
+const ITEMS_PER_PAGE = 15;
 
 const AddItems = () => {
     const room_id = localStorage.getItem("room_id");
@@ -10,6 +10,7 @@ const AddItems = () => {
     const [showPopup, setShowPopup] = useState(false);
     const [showDownloadPopup, setShowDownloadPopup] = useState(false);
     const [items, setItems] = useState([]);
+    const [totalCount, settotalCount] = useState(0);
     const [loading, setLoading] = useState(true);
     const [form, setForm] = useState({
         _id: '',
@@ -123,23 +124,25 @@ const AddItems = () => {
         }
     };
 
+    
     useEffect(() => {
-        handleGetItems({ room_id });
-    }, []);
+        handleGetItems({ room_id ,currentPage});
+    }, [currentPage]);
 
-    const handleGetItems = async (room_idObj) => {
+    const handleGetItems = async (room_idObj,currentPage) => {
         setLoading(true);
         try {
-            const response = await fetch('https://back-end-room-sharing.onrender.com/api/getitems', {
+            const response = await fetch(`http://localhost:666/api/getitems`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify(room_idObj),
+                body: JSON.stringify(room_idObj,currentPage),
             });
 
             if (response.ok) {
                 const data = await response.json();
+                settotalCount(data.totalCount);
                 setItems(data.items);
                 setLoading(false);
             } else {
@@ -220,7 +223,7 @@ const AddItems = () => {
         const room_id = localStorage.getItem("room_id");
 
         try {
-            const response = await fetch(`https://back-end-room-sharing.onrender.com/api/downloadtemplate`, {
+            const response = await fetch(`http://localhost:666/api/downloadtemplate`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -252,9 +255,9 @@ const AddItems = () => {
     };
 
     // Calculate pagination variables
-    const totalPages = Math.ceil(items.length / ITEMS_PER_PAGE);
+    const totalPages = Math.ceil(totalCount / ITEMS_PER_PAGE);
     const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
-    const currentItems = items.slice(startIndex, startIndex + ITEMS_PER_PAGE);
+
 
     return (
         <div className="add-items">
@@ -289,12 +292,12 @@ const AddItems = () => {
                             <ShimmerRow />
                             <ShimmerRow />
                         </>
-                    ) : currentItems.length === 0 ? (
+                    ) : totalCount === 0 ? (
                         <tr>
                             <td colSpan="9" style={{ textAlign: 'center' }}>No data available</td>
                         </tr>
                     ) : (
-                        currentItems.map((item, index) => (
+                        items?.map((item, index) => (
                             <tr key={item.id}>
                                 <td>{startIndex + index + 1}</td>
                                 <td>{item.category}</td>
