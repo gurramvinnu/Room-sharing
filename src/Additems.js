@@ -132,7 +132,7 @@ const AddItems = () => {
     const handleGetItems = async (room_idObj,currentPage) => {
         setLoading(true);
         try {
-            const response = await fetch(`http://localhost:666/api/getitems`, {
+            const response = await fetch(`https://back-end-room-sharing.onrender.com/api/getitems`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -223,7 +223,7 @@ const AddItems = () => {
         const room_id = localStorage.getItem("room_id");
 
         try {
-            const response = await fetch(`http://localhost:666/api/downloadtemplate`, {
+            const response = await fetch(`https://back-end-room-sharing.onrender.com/api/downloadtemplate`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
