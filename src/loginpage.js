@@ -56,7 +56,7 @@ const LoginPage = () => {
            
             <form className="login-form" onSubmit={handleSubmit}>
             <div className="logo">
-                <img src="https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.freepik.com%2Fpremium-ai-image%2Finclusive-group-people-ai-generated_61009544.htm&psig=AOvVaw3kuOvR0WKtLvp0xzidtpHJ&ust=1720872456727000&source=images&cd=vfe&opi=89978449&ved=0CBEQjRxqFwoTCMDJ1s67oYcDFQAAAAAdAAAAABAEhttps://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.freepik.com%2Fpremium-ai-image%2Finclusive-group-people-ai-generated_61009544.htm&psig=AOvVaw3kuOvR0WKtLvp0xzidtpHJ&ust=1720872456727000&source=images&cd=vfe&opi=89978449&ved=0CBEQjRxqFwoTCMDJ1s67oYcDFQAAAAAdAAAAABAE" alt="Logo" />
+            <img src={process.env.PUBLIC_URL + '/logo.jpeg'} alt="Logo" />
             </div>
                 <div className="input-container">
                     <label htmlFor="phone">Phone</label>
@@ -66,7 +66,7 @@ const LoginPage = () => {
                         name="phone"
                         className="input-field"
                         value={phone}
-                        onChange={(e) => setPhone(e.target.value)}
+                        onChange={(e) => { setPhone(e.target.value); setErrorMessage(''); }}
                     />
                 </div>
                 <div className="input-container">
@@ -78,7 +78,7 @@ const LoginPage = () => {
                             name="password"
                             className="input-field"
                             value={password}
-                            onChange={(e) => setPassword(e.target.value)}
+                            onChange={(e) => { setPassword(e.target.value); setErrorMessage(''); }}
                         />
                         <span 
                             className="password-toggle-icon" 

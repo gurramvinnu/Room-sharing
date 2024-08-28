@@ -8,17 +8,20 @@
 }
 
 .logo img {
-    width: 100px;
+    height: 250px;
+    width: 320px;
     margin-bottom: 20px;
 }
 
 .login-form {
     display: flex;
     flex-direction: column;
+    height: 600px;
     width: 300px;
     padding: 100px;
-    border: 1px solid #ccc;
-    border-radius: 10px;
+    
+    border: 4px solid #ccc;
+    border-radius: 40px;
     background-color: #fff;
 }
 
@@ -60,4 +63,7 @@
 .new-user a {
     color: #007bff;
     text-decoration: none;
+}
+.error-message {
+    color: red;
 }

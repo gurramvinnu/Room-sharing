@@ -105,6 +105,7 @@ const Header = () => {
                         firstName: data.items.first_name,
                         lastName: data.items.last_name,
                         phoneNumber: data.items.phone,
+                        email:data.items.email,
                         joinDate: data.items.joinDate,
                         room_id: data.items.room_id
                     });
@@ -123,8 +124,10 @@ const Header = () => {
             first_name: form.firstName,
             last_name: form.lastName,
             phone: form.phoneNumber,
+            email:form.email,
             joinDate: form.joinDate,
-            room_id: localStorage.getItem('room_id')
+            room_id: localStorage.getItem('room_id'),
+            url:profileImage
         };
 
         try {
@@ -139,6 +142,7 @@ const Header = () => {
             if (response.ok) {
                 
                 setShowPopup(!showPopup);
+                setEditProfileOpen(false);
                 handleReset();
                 const data = await response.json();
                 setForm({
@@ -228,6 +232,7 @@ const Header = () => {
                                 accept="image/*"
                                 onChange={handleImageUpload}
                                 style={{ display: 'none' }}
+                                disabled
                             />
                         </div>
                         <form onSubmit={(e) => { e.preventDefault(); handleUpdateItem(); }}>

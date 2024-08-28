@@ -10,9 +10,10 @@
 .signup-form {
     display: center;
     flex-direction: column;
+    height: 680px;
     width: 350px;
     padding: 50px;
-    border: 1px solid #ccc;
+    border: 3px solid #eaec79;
     border-radius: 10px;
     background-color: #fff;
 }
@@ -49,15 +50,16 @@
     border: none;
     border-radius: 15px;
     
-    color: rgb(30, 28, 28);
+    color: rgb(197, 13, 214);
     cursor: pointer;
 }
 /* SignupPage.css */
 .signup-container {
+    height: 900px;
     max-width: 500px;
     margin: auto;
     padding: 20px;
-    border: 1px solid #ccc;
+    border: 1px solid #717981;
     border-radius: 10px;
     background-color: #f9f9f9;
 }
