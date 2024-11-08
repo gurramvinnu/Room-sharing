@@ -471,7 +471,7 @@ const AddItems = () => {
                             </label>
                             <div className="popup-buttons">
                                 <button type="button" onClick={toggleDownloadPopup}>Close</button>
-                                <button onClick={handleDownloadItems}>Download PDF</button>
+                                <button onClick={handleDownloadItems} disabled>Download PDF</button>
                             </div>
                         </form>
                     </div>

@@ -35,7 +35,7 @@ const Dashboard = () => {
     const Loginname = localStorage.getItem('Loginname');
     const [showPopup, setShowPopup] = useState(!roomid);
 
-    useEffect(() => {
+    useEffect(() => {debugger
         setMonthLabel(monthNamesMap[selectedMonth]);
     }, [selectedMonth]);
 
@@ -143,7 +143,7 @@ const Dashboard = () => {
                 {loading ? (
                     <ShimmerCard />
                 ) : (
-                    <Pie data={pieData.length === 0 ? noDataChart : {
+                    <Pie data={totalMonthsExpansion === 0 ? noDataChart : {
                         datasets: [{
                             data: pieData,
                             backgroundColor: [
